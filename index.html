@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>我的成长路径</title>
+  <title>MY PERSONAL WEEEEEEEB!</title>
 
   <style>
     body {
@@ -102,14 +102,8 @@
       <h2>刷题记录</h2>
       <p>这里以后可以按日期或难度记录做过的题。</p>
     </div>
-  </div>
+  <div id="log" class="module"></div>
 
-  <div id="log" class="module">
-    <div class="card">
-      <h2>学习日志</h2>
-      <p>2026-01-14：完成 GitHub Pages 搭建。</p>
-    </div>
-  </div>
 
   <div id="about" class="module">
     <div class="card">
@@ -120,13 +114,24 @@
 </main>
 
 <script>
-  function showModule(id, btn) {
-    document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+  const logs = [
+    { date: "2026-01-14", text: "搭建 GitHub Pages 个人网站" },
+    { date: "2026-01-15", text: "完成第一个可交互模块页面" }
+  ];
 
-    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+  function renderLogs() {
+    const container = document.getElementById("log");
+    container.innerHTML = `
+      <div class="card">
+        <h2>学习日志</h2>
+        <ul>
+          ${logs.map(log => `<li>${log.date}：${log.text}</li>`).join("")}
+        </ul>
+      </div>
+    `;
   }
+
+  renderLogs();
 </script>
 
 </body>
