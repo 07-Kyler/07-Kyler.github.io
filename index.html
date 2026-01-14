@@ -79,6 +79,7 @@
 </nav>
 
 <main>
+  <!-- 首页 -->
   <div id="home" class="module active">
     <div class="card">
       <h2>欢迎</h2>
@@ -86,6 +87,7 @@
     </div>
   </div>
 
+  <!-- 学习路线 -->
   <div id="roadmap" class="module">
     <div class="card">
       <h2>学习路线</h2>
@@ -97,16 +99,18 @@
     </div>
   </div>
 
+  <!-- 刷题记录 -->
   <div id="problems" class="module">
     <div class="card">
       <h2>刷题记录</h2>
       <p>这里以后可以按日期或难度记录做过的题。</p>
     </div>
-  </div> 
-  
+  </div>
+
+  <!-- 学习日志（JS 渲染） -->
   <div id="log" class="module"></div>
 
-
+  <!-- 关于我 -->
   <div id="about" class="module">
     <div class="card">
       <h2>关于我</h2>
@@ -116,6 +120,7 @@
 </main>
 
 <script>
+  // 模块切换函数（核心交互）
   function showModule(id, btn) {
     document.querySelectorAll('.module').forEach(m =>
       m.classList.remove('active')
@@ -128,11 +133,13 @@
     btn.classList.add('active');
   }
 
+  // 学习日志数据
   const logs = [
     { date: "2026-01-14", text: "搭建 GitHub Pages 个人网站" },
     { date: "2026-01-15", text: "完成第一个可交互模块页面" }
   ];
 
+  // 渲染学习日志
   function renderLogs() {
     const container = document.getElementById("log");
     container.innerHTML = `
@@ -145,9 +152,9 @@
     `;
   }
 
+  // 页面加载后立即渲染日志
   renderLogs();
 </script>
-
 
 </body>
 </html>
