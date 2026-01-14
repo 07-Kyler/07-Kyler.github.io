@@ -1,43 +1,92 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <title>我的题解笔记</title>
+  <meta charset="UTF-8" />
+  <title>题解笔记</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
   <style>
     body {
+      margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #f5f7fa;
-      padding: 24px;
     }
-    h1 {
-      margin-bottom: 16px;
+    .layout {
+      display: flex;
+      height: 100vh;
     }
-    ul {
-      padding-left: 20px;
+    .sidebar {
+      width: 260px;
+      background: #ffffff;
+      border-right: 1px solid #ddd;
+      padding: 16px;
+      box-sizing: border-box;
+      overflow-y: auto;
     }
-    li {
+    .sidebar h2 {
+      margin-top: 0;
+      font-size: 18px;
+    }
+    .sidebar li {
+      cursor: pointer;
       margin: 8px 0;
-    }
-    a {
       color: #0969da;
-      text-decoration: none;
     }
-    a:hover {
+    .sidebar li:hover {
       text-decoration: underline;
+    }
+    .content {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+    }
+    pre {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 12px;
+      border-radius: 6px;
     }
   </style>
 </head>
+
 <body>
 
-<h1>📘 ACM / 算法题解</h1>
+<div class="layout">
+  <aside class="sidebar">
+    <h2>📘 题解目录</h2>
+    <ul id="menu"></ul>
+    <hr />
+    <a href="/" style="text-decoration:none;">← 返回首页</a>
+  </aside>
 
-<ul>
-  <li><a href="二分.md">二分查找</a></li>
-  <li><a href="BFS.md">BFS 模板</a></li>
-  <!-- 你以后继续往下加 -->
-</ul>
+  <main class="content" id="content">
+    <h2>请选择题解</h2>
+    <p>左侧自动生成目录。</p>
+  </main>
+</div>
 
-<p><a href="/">← 返回首页</a></p>
+<script>
+  fetch("notes.json")
+    .then(res => res.json())
+    .then(list => {
+      const menu = document.getElementById("menu");
+      list.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item.title;
+        li.onclick = () => loadNote(item.file);
+        menu.appendChild(li);
+      });
+    });
+
+  function loadNote(filename) {
+    fetch(filename)
+      .then(res => res.text())
+      .then(md => {
+        document.getElementById("content").innerHTML = marked.parse(md);
+      });
+  }
+</script>
 
 </body>
 </html>
