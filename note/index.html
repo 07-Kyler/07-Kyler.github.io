@@ -1,213 +1,80 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <title>题解笔记</title>
+    <meta charset="UTF-8">
+    <title>Note 首页</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* ===== 全局背景 ===== */
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
 
-  <style>
-/* ======================
-   全局背景（主页同款）
-====================== */
-html, body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #ffffff;
+        body {
+            background-image: url("/note/assets/images/background.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+                         Arial, sans-serif;
+        }
 
-  background-image: url("/note/assets/images/background.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
+        /* 页面居中容器 */
+        .page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
+        /* ===== 毛玻璃主体 ===== */
+        .glass {
+            width: 75%;
+            max-width: 1000px;
+            padding: 40px 50px;
 
-/* ======================
-   全页毛玻璃（稳定方案）
-====================== */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
 
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(18px) saturate(130%);
-  -webkit-backdrop-filter: blur(18px) saturate(130%);
+            border-radius: 20px;
+            box-sizing: border-box;
+        }
 
-  z-index: 0;
-}
+        h1 {
+            margin-top: 0;
+        }
 
-/* ======================
-   页面主布局
-====================== */
-.layout {
-  position: relative;
-  z-index: 1;
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
 
-  display: flex;
-  gap: 32px;
-  padding: 120px 40px 60px;
-  align-items: flex-start;
-}
-
-/* ======================
-   左侧导航栏
-====================== */
-.sidebar {
-  width: 260px;
-  flex-shrink: 0;
-
-  padding: 20px 14px;
-  background: rgba(255,255,255,0.10);
-  backdrop-filter: blur(24px);
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.25);
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sidebar li {
-  margin-bottom: 12px;
-}
-
-.sidebar a {
-  display: block;
-  padding: 12px 16px;
-  font-size: 14px;
-  color: #ffffff;
-  text-decoration: none;
-  cursor: pointer;
-
-  background: rgba(255,255,255,0.12);
-  border-radius: 12px 24px 24px 12px;
-  border: 1px solid rgba(255,255,255,0.25);
-
-  transition: all 0.25s ease;
-}
-
-.sidebar a:hover {
-  transform: translateX(8px);
-  background: rgba(255,255,255,0.20);
-  border-color: rgba(255,255,255,0.45);
-}
-
-/* ======================
-   右侧内容区
-====================== */
-.content {
-  flex: 1;
-}
-
-/* 正文卡片 */
-article {
-  max-width: 900px;
-  padding: 36px 40px;
-
-  background: rgba(255,255,255,0.14);
-  backdrop-filter: blur(22px);
-  border-radius: 28px;
-  border: 1px solid rgba(255,255,255,0.30);
-}
-
-article h1,
-article h2,
-article h3 {
-  color: #ffffff;
-}
-
-article p,
-article li {
-  color: rgba(255,255,255,0.90);
-  line-height: 1.7;
-}
-
-article hr {
-  border: none;
-  height: 1px;
-  background: rgba(255,255,255,0.25);
-  margin: 32px 0;
-}
-
-/* 代码块 */
-pre {
-  background: rgba(0,0,0,0.55);
-  padding: 18px 20px;
-  border-radius: 16px;
-  overflow-x: auto;
-}
-
-code {
-  color: #9be9ff;
-}
-
-/* ======================
-   响应式
-====================== */
-@media (max-width: 900px) {
-  .layout {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-  }
-
-  article {
-    max-width: 100%;
-  }
-}
-  </style>
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="layout">
-  <aside class="sidebar">
-    <h2>📘 题解目录</h2>
-    <ul id="menu"></ul>
-    <hr />
-    <a href="/">← 返回首页</a>
-  </aside>
+<div class="page">
+    <div class="glass">
+        <h1>我的算法笔记</h1>
+        <p>
+            这里用于记录我的算法学习路径、题解与思考过程。
+        </p>
 
-  <main class="content" id="content">
-    <article>
-      <h2>客官想看哪篇题解</h2>
-      <p>(^_^)</p>
-    </article>
-  </main>
+        <ul>
+            <li><a href="./notes.html">题解总览</a></li>
+            <li><a href="#">AtCoder</a></li>
+            <li><a href="#">Codeforces</a></li>
+        </ul>
+    </div>
 </div>
-
-<script>
-fetch("notes.json")
-  .then(res => res.json())
-  .then(list => {
-    const menu = document.getElementById("menu");
-    list.forEach(item => {
-      const li = document.createElement("li");
-      const a = document.createElement("a");
-      a.textContent = item.title;
-      a.onclick = () => loadNote(item.file);
-      li.appendChild(a);
-      menu.appendChild(li);
-    });
-  });
-
-function loadNote(filename) {
-  fetch(filename)
-    .then(res => res.text())
-    .then(md => {
-      document.getElementById("content").innerHTML =
-        `<article>${marked.parse(md)}</article>`;
-    });
-}
-</script>
 
 </body>
 </html>
