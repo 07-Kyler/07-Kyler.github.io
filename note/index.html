@@ -14,52 +14,43 @@ html, body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   background:
-    linear-gradient(
-      rgba(0, 0, 0, 0.45),
-      rgba(0, 0, 0, 0.45)
-    ),
+    linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
     url("assets/images/background.jpg") center / cover fixed no-repeat;
 }
 
-.page,
-.container,
-main {
+/* ✅ 真正的页面主布局 */
+.layout {
   display: flex;
   gap: 32px;
   padding: 120px 40px 60px;
+  align-items: flex-start;
 }
 
 aside,
 .sidebar {
   width: 260px;
   flex-shrink: 0;
+
   padding: 20px 14px;
-
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255,255,255,0.08);
   backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.25);
 }
 
-aside ul,
 .sidebar ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-aside li,
 .sidebar li {
   margin-bottom: 12px;
 }
 
-aside a,
 .sidebar a {
   display: block;
   padding: 12px 16px;
-
   color: #ffffff;
   text-decoration: none;
   font-size: 14px;
@@ -67,31 +58,30 @@ aside a,
 
   background: rgba(255,255,255,0.10);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-
   border-radius: 12px 24px 24px 12px;
   border: 1px solid rgba(255,255,255,0.25);
 
   transition: all 0.25s ease;
 }
 
-aside a:hover,
 .sidebar a:hover {
   transform: translateX(8px);
   background: rgba(255,255,255,0.18);
   border-color: rgba(255,255,255,0.45);
 }
 
-article,
-.content,
-.markdown-body {
+/* ✅ 右侧内容区 */
+.content {
   flex: 1;
+}
+
+/* ✅ 正文阅读宽度限制 */
+article {
+  max-width: 900px;
   padding: 36px 40px;
 
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255,255,255,0.10);
   backdrop-filter: blur(28px) saturate(170%);
-  -webkit-backdrop-filter: blur(28px) saturate(170%);
-
   border-radius: 28px;
   border: 1px solid rgba(255,255,255,0.30);
 }
@@ -108,22 +98,11 @@ article li {
   line-height: 1.7;
 }
 
-article hr {
-  border: none;
-  height: 1px;
-  background: rgba(255,255,255,0.25);
-  margin: 32px 0;
-}
-
 pre {
   background: rgba(0,0,0,0.45);
-  backdrop-filter: blur(12px);
-
   padding: 18px 20px;
   border-radius: 16px;
-
   overflow-x: auto;
-  border: 1px solid rgba(255,255,255,0.2);
 }
 
 code {
@@ -131,15 +110,16 @@ code {
 }
 
 @media (max-width: 900px) {
-  .page,
-  .container,
-  main {
+  .layout {
     flex-direction: column;
   }
 
-  aside,
-  .sidebar {
+  aside {
     width: 100%;
+  }
+
+  article {
+    max-width: 100%;
   }
 }
   </style>
@@ -156,8 +136,10 @@ code {
   </aside>
 
   <main class="content" id="content">
-    <h2>客官想看哪篇题解</h2>
-    <p>(^_^)</p>
+    <article>
+      <h2>客官想看哪篇题解</h2>
+      <p>(^_^)</p>
+    </article>
   </main>
 </div>
 
@@ -166,15 +148,11 @@ fetch("notes.json")
   .then(res => res.json())
   .then(list => {
     const menu = document.getElementById("menu");
-
     list.forEach(item => {
       const li = document.createElement("li");
-
       const a = document.createElement("a");
-      a.href = "javascript:void(0)";
       a.textContent = item.title;
       a.onclick = () => loadNote(item.file);
-
       li.appendChild(a);
       menu.appendChild(li);
     });
