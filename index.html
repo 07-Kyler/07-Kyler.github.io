@@ -17,7 +17,6 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
                "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
                Helvetica, Arial, sans-serif;
-
   color: #ffffff;
 
   background: url("assets/images/background.jpg") no-repeat center center fixed;
@@ -25,9 +24,13 @@ body {
 }
 
 /* =========================
-   顶部标题
+   顶部区域整体固定
 ========================= */
 header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
   padding: 20px 40px;
   font-size: 20px;
   font-weight: 600;
@@ -42,9 +45,13 @@ header {
 }
 
 /* =========================
-   导航栏
+   导航栏（始终在最上层）
 ========================= */
 nav {
+  position: sticky;
+  top: 72px; /* 等于 header 高度 */
+  z-index: 999;
+
   display: flex;
   gap: 10px;
   padding: 16px 40px;
@@ -62,7 +69,6 @@ nav button {
 
   color: #ffffff;
   font-weight: 500;
-
   background: rgba(255,255,255,0.18);
 }
 
@@ -71,20 +77,19 @@ nav button.active {
 }
 
 /* =========================
-   主体布局（关键）
+   主体区域
 ========================= */
 main {
   position: relative;
-
   max-width: 1280px;
   margin: 0 auto;
 
-  /* 左边只留审美空隙，右边明确为数据卡片让位 */
-  padding: 60px 80px 60px 40px;
+  /* 为固定导航预留空间 */
+  padding: 140px 80px 60px 40px;
 }
 
 /* =========================
-   阅读卡片（中间）
+   阅读卡片
 ========================= */
 .card {
   max-width: 720px;
@@ -106,12 +111,13 @@ main {
 }
 
 /* =========================
-   右侧数据卡片（缩窄 + 不重叠）
+   右侧数据卡片（永远低于导航）
 ========================= */
 #site-stats {
   position: absolute;
-  top: 140px;
+  top: 180px;
   right: 40px;
+  z-index: 100; /* 明确低于 header/nav */
 
   width: 220px;
   padding: 22px 20px;
@@ -136,7 +142,7 @@ main {
 }
 
 /* =========================
-   模块显示控制
+   模块显示
 ========================= */
 .module {
   display: none;
@@ -147,11 +153,11 @@ main {
 }
 
 /* =========================
-   响应式（小屏自动取消侧栏）
+   响应式：小屏取消侧栏
 ========================= */
 @media (max-width: 1024px) {
   main {
-    padding: 40px 20px;
+    padding: 120px 20px 40px;
   }
 
   #site-stats {
@@ -165,6 +171,7 @@ main {
   }
 }
 </style>
+
 
 
 
