@@ -5,103 +5,115 @@
   <title>MY PERSONAL WEEEEEEEB!</title>
 
   <style>
+    /* ===== 页面基础 ===== */
     body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
-    /* 背景图片 */
-    background-image: url("assets/images/background.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+      background-image: url("assets/images/background.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
 
-    /* 兜底背景色（图片加载失败时） */
-    background-color: #f5f7fa;
+      background-color: #f5f7fa;
 
-    /* 关键：建立层级上下文 */
-    position: relative;
-    z-index: 0;
-  }
+      position: relative;
+      z-index: 0;
+    }
 
- 
+    /* 半透明遮罩：只负责显示，不拦截点击 */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.6);
+      z-index: 0;
+      pointer-events: none;
+    }
 
-  header {
-    background-color: #24292f;
-    color: white;
-    padding: 16px;
-    font-size: 20px;
-  }
+    /* ===== 顶部 ===== */
+    header {
+      background-color: #24292f;
+      color: white;
+      padding: 16px;
+      font-size: 20px;
 
-  nav {
-    display: flex;
-    background-color: #ffffff;
-    border-bottom: 1px solid #ddd;
-  }
+      position: relative;
+      z-index: 1;
+    }
 
-  nav button {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-size: 16px;
-  }
+    /* ===== 导航 ===== */
+    nav {
+      display: flex;
+      background-color: #ffffff;
+      border-bottom: 1px solid #ddd;
 
-  nav button:hover {
-    background-color: #f0f0f0;
-  }
+      position: relative;
+      z-index: 1;
+    }
 
-  nav button.active {
-    border-bottom: 3px solid #0969da;
-    font-weight: bold;
-  }
+    nav button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
 
-  main {
-    padding: 24px;
-  }
+    nav button:hover {
+      background-color: #f0f0f0;
+    }
 
-  .module {
-    display: none;
-  }
+    nav button.active {
+      border-bottom: 3px solid #0969da;
+      font-weight: bold;
+    }
 
-  .module.active {
-    display: block;
-  }
+    /* ===== 主体 ===== */
+    main {
+      padding: 24px;
+      position: relative;
+      z-index: 1;
+    }
 
-  .card {
-    background: white;
-    padding: 16px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    margin-bottom: 16px;
-  }
+    .module {
+      display: none;
+    }
 
-    /* ===== 新增：右侧统计框（仅新增，不影响原样式） ===== */
-   #site-stats {
-  position: fixed;
+    .module.active {
+      display: block;
+    }
 
-  /* 右侧位置：靠近内容区，而不是贴边 */
-  right: 32px;
+    .card {
+      background: white;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 16px;
+    }
 
-  /* 垂直方向居中 */
-  top: 50%;
-  transform: translateY(-50%);
+    /* ===== 右侧统计框 ===== */
+    #site-stats {
+      position: fixed;
+      right: 32px;
+      top: 50%;
+      transform: translateY(-50%);
 
-  /* 竖向长方形 */
-  width: 220px;
-  min-height: 320px;
+      width: 220px;
+      min-height: 320px;
 
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 12px;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+      font-size: 14px;
+      line-height: 1.8;
 
-  font-size: 14px;
-  line-height: 1.8;
-}
-
+      z-index: 2;
+    }
 
     #site-stats h3 {
       margin: 0 0 12px 0;
@@ -127,11 +139,8 @@
 
 <body>
 
-<header>
-  我的成长路径
-</header>
+<header>我的成长路径</header>
 
-<!-- ===== 新增：右侧统计框 HTML ===== -->
 <div id="site-stats">
   <h3>一个记录数据的长方形</h3>
 
@@ -161,7 +170,6 @@
 </nav>
 
 <main>
-  <!-- 首页 -->
   <div id="home" class="module active">
     <div class="card">
       <h2>欢迎</h2>
@@ -169,7 +177,6 @@
     </div>
   </div>
 
-  <!-- 学习路线 -->
   <div id="roadmap" class="module">
     <div class="card">
       <h2>学习路线</h2>
@@ -181,7 +188,6 @@
     </div>
   </div>
 
-  <!-- 刷题记录 -->
   <div id="problems" class="module">
     <div class="card">
       <h2>刷题记录</h2>
@@ -189,10 +195,8 @@
     </div>
   </div>
 
-  <!-- 学习日志 -->
   <div id="log" class="module"></div>
 
-  <!-- 关于我 -->
   <div id="about" class="module">
     <div class="card">
       <h2>关于我</h2>
@@ -202,7 +206,6 @@
 </main>
 
 <script>
-  /* ===== 原有模块切换逻辑（未修改） ===== */
   function showModule(id, btn) {
     document.querySelectorAll('.module').forEach(m =>
       m.classList.remove('active')
@@ -215,7 +218,6 @@
     btn.classList.add('active');
   }
 
-  /* ===== 原有学习日志逻辑（未修改） ===== */
   const logs = [
     { date: "2026-01-14", text: "搭建 GitHub Pages 个人网站" },
     { date: "2026-01-15", text: "完成第一个可交互模块页面" }
@@ -227,7 +229,7 @@
       <div class="card">
         <h2>学习日志</h2>
         <ul>
-          ${logs.map(log => `<li>${log.date}：${log.text}</li>`).join("")}
+          ${logs.map(l => `<li>${l.date}：${l.text}</li>`).join("")}
         </ul>
       </div>
     `;
@@ -235,7 +237,6 @@
 
   renderLogs();
 
-  /* ===== 新增：统计框 JS（完全独立） ===== */
   const SITE_CREATE_TIME = new Date('2026-01-15 20:00:00');
   const ARTICLE_COUNT = 18;
   const LAST_UPDATE = '2026-01-17';
@@ -244,15 +245,15 @@
     const now = new Date();
     let diff = Math.floor((now - SITE_CREATE_TIME) / 1000);
 
-    const days = Math.floor(diff / 86400);
+    const d = Math.floor(diff / 86400);
     diff %= 86400;
-    const hours = Math.floor(diff / 3600);
+    const h = Math.floor(diff / 3600);
     diff %= 3600;
-    const minutes = Math.floor(diff / 60);
-    const seconds = diff % 60;
+    const m = Math.floor(diff / 60);
+    const s = diff % 60;
 
     document.getElementById('site-runtime').innerText =
-      `${days} 天 ${hours} 小时 ${minutes} 分 ${seconds} 秒`;
+      `${d} 天 ${h} 小时 ${m} 分 ${s} 秒`;
   }
 
   document.getElementById('article-count').innerText = ARTICLE_COUNT;
