@@ -63,18 +63,30 @@
     }
 
     /* ===== 新增：右侧统计框（仅新增，不影响原样式） ===== */
-    #site-stats {
-      position: fixed;
-      right: 20px;
-      top: 120px;
-      width: 240px;
-      padding: 16px;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-      font-size: 14px;
-      line-height: 1.6;
-    }
+   #site-stats {
+  position: fixed;
+
+  /* 右侧位置：靠近内容区，而不是贴边 */
+  right: 32px;
+
+  /* 垂直方向居中 */
+  top: 50%;
+  transform: translateY(-50%);
+
+  /* 竖向长方形 */
+  width: 220px;
+  min-height: 320px;
+
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+
+  font-size: 14px;
+  line-height: 1.8;
+}
+
 
     #site-stats h3 {
       margin: 0 0 12px 0;
