@@ -5,135 +5,169 @@
   <title>MY PERSONAL WEEEEEEEB!</title>
 
   <style>
-    /* ===== 页面基础 ===== */
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+   :root {
+  --glass-bg: rgba(255, 255, 255, 0.35);
+  --glass-bg-strong: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.45);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --glass-blur: blur(18px);
+}
 
-      background-image: url("assets/images/background.jpg");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
-      background-color: #f5f7fa;
+  background-image: url("assets/images/background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 
-      position: relative;
-      z-index: 0;
-    }
+  background-color: #f5f7fa;
 
-    /* 半透明遮罩：只负责显示，不拦截点击 */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: rgba(255, 255, 255, 0.6);
-      z-index: 0;
-      pointer-events: none;
-    }
+  position: relative;
+  z-index: 0;
+}
 
-    /* ===== 顶部 ===== */
-    header {
-      background-color: #24292f;
-      color: white;
-      padding: 16px;
-      font-size: 20px;
+/* 背景遮罩（不拦截点击） */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.4);
+  z-index: 0;
+  pointer-events: none;
+}
 
-      position: relative;
-      z-index: 1;
-    }
+/* ===== Header ===== */
+header {
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 
-    /* ===== 导航 ===== */
-    nav {
-      display: flex;
-      background-color: #ffffff;
-      border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 
-      position: relative;
-      z-index: 1;
-    }
+  color: #111;
+  padding: 16px;
+  font-size: 20px;
 
-    nav button {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      font-size: 16px;
-    }
+  position: relative;
+  z-index: 1;
+}
 
-    nav button:hover {
-      background-color: #f0f0f0;
-    }
+/* ===== Navigation ===== */
+nav {
+  display: flex;
 
-    nav button.active {
-      border-bottom: 3px solid #0969da;
-      font-weight: bold;
-    }
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 
-    /* ===== 主体 ===== */
-    main {
-      padding: 24px;
-      position: relative;
-      z-index: 1;
-    }
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 
-    .module {
-      display: none;
-    }
+  position: relative;
+  z-index: 1;
+}
 
-    .module.active {
-      display: block;
-    }
+nav button {
+  flex: 1;
+  padding: 12px;
 
-    .card {
-      background: white;
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      margin-bottom: 16px;
-    }
+  border: none;
+  background: transparent;
 
-    /* ===== 右侧统计框 ===== */
-    #site-stats {
-      position: fixed;
-      right: 32px;
-      top: 50%;
-      transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 16px;
+  color: #111;
 
-      width: 220px;
-      min-height: 320px;
+  transition: background 0.2s ease;
+}
 
-      padding: 20px;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+nav button:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
 
-      font-size: 14px;
-      line-height: 1.8;
+nav button.active {
+  background: rgba(255, 255, 255, 0.45);
+  font-weight: bold;
+}
 
-      z-index: 2;
-    }
+/* ===== Main Content ===== */
+main {
+  padding: 24px;
+  position: relative;
+  z-index: 1;
+}
 
-    #site-stats h3 {
-      margin: 0 0 12px 0;
-      font-size: 16px;
-      border-bottom: 1px solid #e5e5e5;
-      padding-bottom: 6px;
-    }
+.module {
+  display: none;
+}
 
-    .stat-item {
-      margin-bottom: 8px;
-    }
+.module.active {
+  display: block;
+}
 
-    .stat-label {
-      color: #666;
-    }
+/* ===== Content Card (轻玻璃) ===== */
+.card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 
-    .stat-value {
-      font-weight: bold;
-      color: #333;
-    }
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+
+  margin-bottom: 16px;
+}
+
+/* ===== Right Side Stats (Liquid Glass) ===== */
+#site-stats {
+  position: fixed;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 220px;
+  min-height: 320px;
+  padding: 20px;
+
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+
+  font-size: 14px;
+  line-height: 1.8;
+
+  z-index: 2;
+}
+
+#site-stats h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 6px;
+}
+
+.stat-item {
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  color: #555;
+}
+
+.stat-value {
+  font-weight: bold;
+  color: #111;
+}
+
   </style>
 </head>
 
