@@ -70,6 +70,123 @@
   我的成长路径
 </header>
 
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>My Growth Site</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* 右侧统计卡片 */
+        #site-stats {
+            position: fixed;
+            right: 20px;
+            top: 120px;
+            width: 240px;
+            padding: 16px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        #site-stats h3 {
+            margin: 0 0 12px 0;
+            font-size: 16px;
+            border-bottom: 1px solid #e5e5e5;
+            padding-bottom: 6px;
+        }
+
+        .stat-item {
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #666;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 页面主体（示意） -->
+<div style="padding: 40px;">
+    <h1>欢迎来到我的成长记录网站</h1>
+    <p>这里是你的主页内容……</p>
+</div>
+
+<!-- 右侧统计框 -->
+<div id="site-stats">
+    <h3>📊 网站数据</h3>
+
+    <div class="stat-item">
+        <span class="stat-label">已运行：</span>
+        <span class="stat-value" id="site-runtime">计算中...</span>
+    </div>
+
+    <div class="stat-item">
+        <span class="stat-label">题解数量：</span>
+        <span class="stat-value" id="article-count">0</span>
+    </div>
+
+    <div class="stat-item">
+        <span class="stat-label">最后更新：</span>
+        <span class="stat-value" id="last-update">—</span>
+    </div>
+</div>
+
+<script>
+    /************ 配置区（你只需要改这里） ************/
+
+    // 网站创建时间（非常关键）
+    // 格式：'YYYY-MM-DD HH:MM:SS'
+    const SITE_CREATE_TIME = new Date('2026-01-15 20:00:00');
+
+    // 当前题解数量（静态方案，最稳）
+    const ARTICLE_COUNT = 18;
+
+    // 最后更新时间（可选）
+    const LAST_UPDATE = '2026-01-17';
+
+    /************ 逻辑区（一般不用动） ************/
+
+    function updateRuntime() {
+        const now = new Date();
+        let diff = Math.floor((now - SITE_CREATE_TIME) / 1000);
+
+        const days = Math.floor(diff / (24 * 3600));
+        diff %= (24 * 3600);
+        const hours = Math.floor(diff / 3600);
+        diff %= 3600;
+        const minutes = Math.floor(diff / 60);
+        const seconds = diff % 60;
+
+        document.getElementById('site-runtime').innerText =
+            `${days} 天 ${hours} 小时 ${minutes} 分 ${seconds} 秒`;
+    }
+
+    // 初始化
+    document.getElementById('article-count').innerText = ARTICLE_COUNT;
+    document.getElementById('last-update').innerText = LAST_UPDATE;
+
+    updateRuntime();
+    setInterval(updateRuntime, 1000);
+</script>
+
+</body>
+</html>
+
+  
 <nav>
   <button class="active" onclick="showModule('home', this)">首页</button>
   <button onclick="showModule('roadmap', this)">学习路线</button>
