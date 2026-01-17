@@ -8,12 +8,12 @@
 
   <style>
 /* ======================
-   全局背景（与主页一致）
+   全局背景（主页同款）
 ====================== */
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: #ffffff;
 
@@ -23,20 +23,27 @@ html, body {
 }
 
 /* ======================
-   全页毛玻璃遮罩层（关键）
+   全页毛玻璃（稳定方案）
 ====================== */
-.bg-mask {
-  min-height: 100vh;
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
 
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(18px) saturate(130%);
   -webkit-backdrop-filter: blur(18px) saturate(130%);
+
+  z-index: 0;
 }
 
 /* ======================
    页面主布局
 ====================== */
 .layout {
+  position: relative;
+  z-index: 1;
+
   display: flex;
   gap: 32px;
   padding: 120px 40px 60px;
@@ -158,22 +165,20 @@ code {
 
 <body>
 
-<div class="bg-mask">
-  <div class="layout">
-    <aside class="sidebar">
-      <h2>📘 题解目录</h2>
-      <ul id="menu"></ul>
-      <hr />
-      <a href="/">← 返回首页</a>
-    </aside>
+<div class="layout">
+  <aside class="sidebar">
+    <h2>📘 题解目录</h2>
+    <ul id="menu"></ul>
+    <hr />
+    <a href="/">← 返回首页</a>
+  </aside>
 
-    <main class="content" id="content">
-      <article>
-        <h2>客官想看哪篇题解</h2>
-        <p>(^_^)</p>
-      </article>
-    </main>
-  </div>
+  <main class="content" id="content">
+    <article>
+      <h2>客官想看哪篇题解</h2>
+      <p>(^_^)</p>
+    </article>
+  </main>
 </div>
 
 <script>
