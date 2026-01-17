@@ -4,173 +4,140 @@
   <meta charset="UTF-8" />
   <title>MY PERSONAL WEEEEEEEB!</title>
 
-  <style>
-     :root {
-      --glass-border: rgba(255, 255, 255, 0.35);
-      --glass-highlight: rgba(255, 255, 255, 0.15);
-      --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-      --glass-blur-strong: blur(20px);
-      --glass-blur-light: blur(10px);
-    }
-  
+    <style>
+  /* =========================
+     全局基础
+  ========================= */
   body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  
-    background-image: url("assets/images/background.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-  
-    background-color: #000;
-    position: relative;
-    z-index: 0;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+                   Helvetica, Arial, sans-serif;
+      color: #111;
+      background: url("assets/bg/background.jpg") no-repeat center center fixed;
+      background-size: cover;
   }
   
-  /* ❌ 不再使用白色遮罩，完全移除滤镜层 */
-  /* body::before 已彻底不要 */
+  /* =========================
+     顶部导航栏（Liquid Glass）
+  ========================= */
+  .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
   
-  /* ===== Header（极透明玻璃） ===== */
-  header {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: var(--glass-blur-strong);
-    -webkit-backdrop-filter: var(--glass-blur-strong);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
   
-    border-bottom: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-  
-    color: #111;
-    padding: 16px;
-    font-size: 20px;
-  
-    position: relative;
-    z-index: 2;
+      background: rgba(255, 255, 255, 0.25);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.35);
   }
   
-  /* ===== Navigation ===== */
-  nav {
-    display: flex;
-  
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: var(--glass-blur-strong);
-    -webkit-backdrop-filter: var(--glass-blur-strong);
-  
-    border-bottom: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-  
-    position: relative;
-    z-index: 2;
+  .navbar a {
+      color: rgba(0, 0, 0, 0.85);
+      font-weight: 600;
+      text-decoration: none;
   }
   
-  nav button {
-    flex: 1;
-    padding: 12px;
-  
-    border: none;
-    background: transparent;
-  
-    cursor: pointer;
-    font-size: 16px;
-    color: #111;
-  
-    transition: background 0.2s ease;
+  .navbar a:hover {
+      color: #000;
   }
   
-  nav button:hover {
-    background: rgba(255, 255, 255, 0.12);
+  /* 当前页面高亮 */
+  .navbar .active {
+      background: rgba(255, 255, 255, 0.45);
+      border-radius: 10px;
   }
   
-  nav button.active {
-    background: rgba(255, 255, 255, 0.18);
-    font-weight: bold;
+  /* =========================
+     主体白色内容区
+  ========================= */
+  .main {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 40px;
   }
   
-  /* ===== Main ===== */
-  main {
-    padding: 24px;
-    position: relative;
-    z-index: 1;
+  /* =========================
+     阅读卡片（居中、变短、玻璃态）
+  ========================= */
+  .reading-card {
+      max-width: 760px;           /* 变短 */
+      margin: 0 auto 60px auto;   /* 居中 + 下方留空间 */
+  
+      padding: 36px 40px;
+  
+      backdrop-filter: blur(24px) saturate(170%);
+      -webkit-backdrop-filter: blur(24px) saturate(170%);
+  
+      background: rgba(255, 255, 255, 0.22);
+      border-radius: 22px;
+  
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      box-shadow:
+          0 10px 40px rgba(0, 0, 0, 0.18),
+          inset 0 1px 1px rgba(255, 255, 255, 0.6);
   }
   
-  .module {
-    display: none;
+  .reading-card h1,
+  .reading-card h2,
+  .reading-card p {
+      color: #111;
   }
   
-  .module.active {
-    display: block;
+  /* =========================
+     右侧数据统计卡片（Liquid Glass）
+  ========================= */
+  .stats-card {
+      position: absolute;
+      right: 40px;
+      top: 180px;
+  
+      width: 260px;
+      padding: 24px 22px;
+  
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+  
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+  
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      box-shadow:
+          0 12px 40px rgba(0, 0, 0, 0.25),
+          inset 0 1px 1px rgba(255, 255, 255, 0.55);
   }
   
-  /* ===== 内容卡片（稍微实一点，保证阅读） ===== */
-  .card {
-    background: rgba(255, 255, 255, 0.35);
-    backdrop-filter: var(--glass-blur-light);
-    -webkit-backdrop-filter: var(--glass-blur-light);
-  
-    border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-  
-    padding: 16px;
-    margin-bottom: 16px;
+  .stats-card h3 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 16px;
+      color: #111;
   }
   
-  /* ===== 右侧数据框（核心：几乎全透明） ===== */
-  #site-stats {
-    position: fixed;
-    right: 32px;
-    top: 50%;
-    transform: translateY(-50%);
-  
-    width: 220px;
-    min-height: 320px;
-    padding: 20px;
-  
-    /* 几乎透明 */
-    background: linear-gradient(
-      to bottom right,
-      rgba(255, 255, 255, 0.18),
-      rgba(255, 255, 255, 0.02)
-    );
-  
-    backdrop-filter: var(--glass-blur-strong);
-    -webkit-backdrop-filter: var(--glass-blur-strong);
-  
-    border-radius: 18px;
-  
-    /* 关键：边缘高光 */
-    border: 1px solid var(--glass-border);
-    box-shadow:
-      inset 0 1px 0 var(--glass-highlight),
-      var(--glass-shadow);
-  
-    font-size: 14px;
-    line-height: 1.8;
-  
-    z-index: 3;
+  .stats-card p {
+      margin: 6px 0;
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.85);
   }
   
-  #site-stats h3 {
-    margin: 0 0 12px 0;
-    font-size: 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.25);
-    padding-bottom: 6px;
-  }
+  /* =========================
+     响应式：小屏自动下移
+  ========================= */
+  @media (max-width: 1024px) {
+      .stats-card {
+          position: static;
+          width: auto;
+          margin: 40px auto 0 auto;
+      }
   
-  .stat-item {
-    margin-bottom: 8px;
+      .reading-card {
+          max-width: 100%;
+      }
   }
-  
-  .stat-label {
-    color: rgba(0,0,0,0.65);
-  }
-  
-  .stat-value {
-    font-weight: bold;
-    color: rgba(0,0,0,0.85);
-  }
-
   </style>
+
 </head>
 
 <body>
