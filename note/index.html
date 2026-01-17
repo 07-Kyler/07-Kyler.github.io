@@ -7,18 +7,35 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <style>
+/* ======================
+   全局背景（与主页一致）
+====================== */
 html, body {
   margin: 0;
   padding: 0;
-  color: #ffffff;
+  height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #ffffff;
 
   background:
-    linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-    url("assets/images/background.jpg") center / cover fixed no-repeat;
+    url("assets/images/background.jpg")
+    center / cover fixed no-repeat;
 }
 
-/* ✅ 真正的页面主布局 */
+/* ======================
+   全页毛玻璃遮罩层（关键）
+====================== */
+.bg-mask {
+  min-height: 100vh;
+
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(18px) saturate(130%);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+}
+
+/* ======================
+   页面主布局
+====================== */
 .layout {
   display: flex;
   gap: 32px;
@@ -26,14 +43,16 @@ html, body {
   align-items: flex-start;
 }
 
-aside,
+/* ======================
+   左侧导航栏
+====================== */
 .sidebar {
   width: 260px;
   flex-shrink: 0;
 
   padding: 20px 14px;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(24px) saturate(160%);
+  background: rgba(255,255,255,0.10);
+  backdrop-filter: blur(24px);
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.25);
 }
@@ -51,13 +70,12 @@ aside,
 .sidebar a {
   display: block;
   padding: 12px 16px;
+  font-size: 14px;
   color: #ffffff;
   text-decoration: none;
-  font-size: 14px;
   cursor: pointer;
 
-  background: rgba(255,255,255,0.10);
-  backdrop-filter: blur(16px);
+  background: rgba(255,255,255,0.12);
   border-radius: 12px 24px 24px 12px;
   border: 1px solid rgba(255,255,255,0.25);
 
@@ -66,22 +84,24 @@ aside,
 
 .sidebar a:hover {
   transform: translateX(8px);
-  background: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.20);
   border-color: rgba(255,255,255,0.45);
 }
 
-/* ✅ 右侧内容区 */
+/* ======================
+   右侧内容区
+====================== */
 .content {
   flex: 1;
 }
 
-/* ✅ 正文阅读宽度限制 */
+/* 正文卡片 */
 article {
   max-width: 900px;
   padding: 36px 40px;
 
-  background: rgba(255,255,255,0.10);
-  backdrop-filter: blur(28px) saturate(170%);
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(22px);
   border-radius: 28px;
   border: 1px solid rgba(255,255,255,0.30);
 }
@@ -94,12 +114,20 @@ article h3 {
 
 article p,
 article li {
-  color: rgba(255,255,255,0.88);
+  color: rgba(255,255,255,0.90);
   line-height: 1.7;
 }
 
+article hr {
+  border: none;
+  height: 1px;
+  background: rgba(255,255,255,0.25);
+  margin: 32px 0;
+}
+
+/* 代码块 */
 pre {
-  background: rgba(0,0,0,0.45);
+  background: rgba(0,0,0,0.55);
   padding: 18px 20px;
   border-radius: 16px;
   overflow-x: auto;
@@ -109,12 +137,15 @@ code {
   color: #9be9ff;
 }
 
+/* ======================
+   响应式
+====================== */
 @media (max-width: 900px) {
   .layout {
     flex-direction: column;
   }
 
-  aside {
+  .sidebar {
     width: 100%;
   }
 
@@ -127,20 +158,22 @@ code {
 
 <body>
 
-<div class="layout">
-  <aside class="sidebar">
-    <h2>📘 题解目录</h2>
-    <ul id="menu"></ul>
-    <hr />
-    <a href="/">← 返回首页</a>
-  </aside>
+<div class="bg-mask">
+  <div class="layout">
+    <aside class="sidebar">
+      <h2>📘 题解目录</h2>
+      <ul id="menu"></ul>
+      <hr />
+      <a href="/">← 返回首页</a>
+    </aside>
 
-  <main class="content" id="content">
-    <article>
-      <h2>客官想看哪篇题解</h2>
-      <p>(^_^)</p>
-    </article>
-  </main>
+    <main class="content" id="content">
+      <article>
+        <h2>客官想看哪篇题解</h2>
+        <p>(^_^)</p>
+      </article>
+    </main>
+  </div>
 </div>
 
 <script>
