@@ -7,9 +7,6 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <style>
-/* ======================
-   全局背景（继承主页）
-====================== */
 html, body {
   margin: 0;
   padding: 0;
@@ -24,7 +21,6 @@ html, body {
     url("assets/images/background.jpg") center / cover fixed no-repeat;
 }
 
-/* 页面整体容器 */
 .page,
 .container,
 main {
@@ -33,14 +29,10 @@ main {
   padding: 120px 40px 60px;
 }
 
-/* ======================
-   左侧：题目目录（玻璃侧栏）
-====================== */
 aside,
 .sidebar {
   width: 260px;
   flex-shrink: 0;
-
   padding: 20px 14px;
 
   background: rgba(255, 255, 255, 0.08);
@@ -51,7 +43,6 @@ aside,
   border: 1px solid rgba(255,255,255,0.25);
 }
 
-/* 去掉原来的小圆点 */
 aside ul,
 .sidebar ul {
   list-style: none;
@@ -59,21 +50,20 @@ aside ul,
   margin: 0;
 }
 
-/* 目录项 = 左直右圆的卡片 */
 aside li,
 .sidebar li {
   margin-bottom: 12px;
 }
 
-/* 链接样式 */
 aside a,
 .sidebar a {
   display: block;
-
   padding: 12px 16px;
+
   color: #ffffff;
   text-decoration: none;
   font-size: 14px;
+  cursor: pointer;
 
   background: rgba(255,255,255,0.10);
   backdrop-filter: blur(16px);
@@ -85,7 +75,6 @@ aside a,
   transition: all 0.25s ease;
 }
 
-/* 悬停：向右“伸长” */
 aside a:hover,
 .sidebar a:hover {
   transform: translateX(8px);
@@ -93,14 +82,10 @@ aside a:hover,
   border-color: rgba(255,255,255,0.45);
 }
 
-/* ======================
-   右侧：题解正文（高通透玻璃）
-====================== */
 article,
 .content,
 .markdown-body {
   flex: 1;
-
   padding: 36px 40px;
 
   background: rgba(255, 255, 255, 0.10);
@@ -111,21 +96,18 @@ article,
   border: 1px solid rgba(255,255,255,0.30);
 }
 
-/* 标题 */
 article h1,
 article h2,
 article h3 {
   color: #ffffff;
 }
 
-/* 标签 / 描述 */
 article p,
 article li {
   color: rgba(255,255,255,0.88);
   line-height: 1.7;
 }
 
-/* 分割线 */
 article hr {
   border: none;
   height: 1px;
@@ -133,7 +115,6 @@ article hr {
   margin: 32px 0;
 }
 
-/* 代码块 */
 pre {
   background: rgba(0,0,0,0.45);
   backdrop-filter: blur(12px);
@@ -149,9 +130,6 @@ code {
   color: #9be9ff;
 }
 
-/* ======================
-   小屏适配
-====================== */
 @media (max-width: 900px) {
   .page,
   .container,
@@ -164,8 +142,7 @@ code {
     width: 100%;
   }
 }
-</style>
-
+  </style>
 </head>
 
 <body>
@@ -175,7 +152,7 @@ code {
     <h2>📘 题解目录</h2>
     <ul id="menu"></ul>
     <hr />
-    <a href="/" style="text-decoration:none;">← 返回首页</a>
+    <a href="/">← 返回首页</a>
   </aside>
 
   <main class="content" id="content">
@@ -185,25 +162,32 @@ code {
 </div>
 
 <script>
-  fetch("notes.json")
-    .then(res => res.json())
-    .then(list => {
-      const menu = document.getElementById("menu");
-      list.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = item.title;
-        li.onclick = () => loadNote(item.file);
-        menu.appendChild(li);
-      });
-    });
+fetch("notes.json")
+  .then(res => res.json())
+  .then(list => {
+    const menu = document.getElementById("menu");
 
-  function loadNote(filename) {
-    fetch(filename)
-      .then(res => res.text())
-      .then(md => {
-        document.getElementById("content").innerHTML = marked.parse(md);
-      });
-  }
+    list.forEach(item => {
+      const li = document.createElement("li");
+
+      const a = document.createElement("a");
+      a.href = "javascript:void(0)";
+      a.textContent = item.title;
+      a.onclick = () => loadNote(item.file);
+
+      li.appendChild(a);
+      menu.appendChild(li);
+    });
+  });
+
+function loadNote(filename) {
+  fetch(filename)
+    .then(res => res.text())
+    .then(md => {
+      document.getElementById("content").innerHTML =
+        `<article>${marked.parse(md)}</article>`;
+    });
+}
 </script>
 
 </body>
