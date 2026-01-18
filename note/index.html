@@ -1,19 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <!-- KaTeX CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
 
-  <!-- KaTeX JS -->
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
-
-  <!-- KaTeX auto-render -->
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 
-  <!-- highlight.js 核心 + 暗主题（github-dark 高级暗黑风格） -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
 
-  <!-- highlight.js 主文件 + C++ 支持 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
 
@@ -22,223 +16,86 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      transition: background-image 0.6s ease, color 0.4s ease;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
+    /* 使用 CSS 变量管理颜色，避免 JS 强制修改 style 导致语法高亮失效 */
+    :root {
+      --text-color: #111111;
+      --bg-image: url("../assets/images/backgroundlight.jpg");
+      --mask-bg: rgba(0, 0, 0, 0.15);
+      --card-bg: rgba(255, 255, 255, 0.20);
     }
 
     body.dark-mode {
-      background-image: url("../assets/images/backgrounddark.jpg");
-      color: #e0e0e0 !important;
-    }
-    body:not(.dark-mode) {
-      background-image: url("../assets/images/backgroundlight.jpg");
-      color: #111111 !important;
+      --text-color: #e0e0e0;
+      --bg-image: url("../assets/images/backgrounddark.jpg");
+      --mask-bg: rgba(30, 30, 30, 0.45);
+      --card-bg: rgba(30, 30, 30, 0.65);
     }
 
-    body:not(.dark-mode) *,
-    body:not(.dark-mode) *::before,
-    body:not(.dark-mode) *::after {
-      color: #111111 !important;
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-image: var(--bg-image);
+      background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;
+      color: var(--text-color);
+      transition: background-image 0.6s ease;
     }
 
-    body.dark-mode *,
-    body.dark-mode *::before,
-    body.dark-mode *::after {
-      color: #e0e0e0 !important;
+    /* 确保所有文本使用变量颜色，但排除 hljs 内部的 span */
+    article p, article li, article h1, article h2, article h3 {
+      color: var(--text-color);
     }
 
     .bg-mask {
       min-height: 100vh;
-      background: rgba(0, 0, 0, 0.15);
+      background: var(--mask-bg);
       transition: background 0.4s ease;
     }
-    body.dark-mode .bg-mask {
-      background: rgba(30, 30, 30, 0.45);
-    }
 
-    .layout {
-      display: flex;
-      gap: 32px;
-      padding: 120px 40px 60px;
-      align-items: flex-start;
-    }
+    .layout { display: flex; gap: 32px; padding: 120px 40px 60px; align-items: flex-start; }
 
     .sidebar {
-      width: 260px;
-      flex-shrink: 0;
-      padding: 20px 14px;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.30);
-      transition: all 0.4s ease;
-      z-index: 900;
-    }
-    body:not(.dark-mode) .sidebar {
-      background: rgba(255,255,255,0.18);
-    }
-    body.dark-mode .sidebar {
-      background: rgba(30,30,30,0.65);
-      border: 1px solid rgba(255,255,255,0.15);
+      width: 260px; flex-shrink: 0; padding: 20px 14px;
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-radius: 20px; border: 1px solid rgba(255,255,255,0.30);
+      background: var(--card-bg);
     }
 
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .sidebar li {
-      margin-bottom: 12px;
-    }
     .sidebar a {
-      display: block;
-      padding: 12px 16px;
-      font-size: 14px;
-      text-decoration: none;
-      cursor: pointer;
-      background: rgba(255,255,255,0.14);
-      border-radius: 12px 24px 24px 12px;
-      border: 1px solid rgba(255,255,255,0.25);
-      transition: all 0.25s ease;
-    }
-    body.dark-mode .sidebar a {
-      color: #e0e0e0 !important;
-    }
-    .sidebar a:hover {
-      transform: translateX(8px);
-      background: rgba(255,255,255,0.26);
-      border-color: rgba(255,255,255,0.45);
-    }
-    body.dark-mode .sidebar a:hover {
-      background: rgba(255,255,255,0.20);
-      border-color: rgba(255,255,255,0.35);
+      display: block; padding: 12px 16px; font-size: 14px; text-decoration: none;
+      cursor: pointer; background: rgba(255,255,255,0.14); border-radius: 12px 24px 24px 12px;
+      margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.25); transition: all 0.25s ease;
     }
 
-    .content {
-      flex: 1;
-      display: flex;
-    }
+    .sidebar a:hover { transform: translateX(8px); background: rgba(255,255,255,0.26); }
 
     article {
-      width: 100%;
-      max-width: 980px;
-      padding: 36px 40px;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 28px;
-      border: 1px solid rgba(255,255,255,0.35);
-      transition: all 0.4s ease;
-    }
-    body:not(.dark-mode) article {
-      background: rgba(255,255,255,0.20);
-    }
-    body.dark-mode article {
-      background: rgba(30,30,30,0.65);
-      border: 1px solid rgba(255,255,255,0.15);
-    }
-
-    article h1, article h2, article h3 {
-      color: #111111 !important;
-    }
-    body.dark-mode article h1,
-    body.dark-mode article h2,
-    body.dark-mode article h3 {
-      color: #e0e0e0 !important;
-    }
-
-    article p, article li {
-      color: #111111 !important;
-      line-height: 1.7;
-    }
-    body.dark-mode article p,
-    body.dark-mode article li {
-      color: #e0e0e0 !important;
-    }
-
-    article hr {
-      border: none;
-      height: 1px;
-      background: rgba(255,255,255,0.25);
-      margin: 32px 0;
-    }
-    body.dark-mode article hr {
-      background: rgba(255,255,255,0.15);
+      width: 100%; max-width: 980px; padding: 36px 40px;
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: 28px; border: 1px solid rgba(255,255,255,0.35);
+      background: var(--card-bg);
     }
 
     pre {
-      background: rgba(30,30,30,0.7);
-      padding: 20px 24px;
-      border-radius: 16px;
+      background: #1e1e1e !important; /* 保持代码块背景深色 */
+      padding: 20px; border-radius: 16px; overflow-x: auto;
       border: 1px solid rgba(100,100,100,0.3);
-      overflow-x: auto;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-      margin: 1.5em 0;
-    }
-    body:not(.dark-mode) pre {
-      background: rgba(0,0,0,0.25);
-    }
-    pre code.hljs {
-      background: transparent !important;
     }
 
-    @media (max-width: 900px) {
-      .layout {
-        flex-direction: column;
-      }
-      .sidebar {
-        width: 100%;
-      }
-      article {
-        max-width: 100%;
-      }
-    }
+    /* 重点：不要让全局文字颜色覆盖代码高亮颜色 */
+    pre code.hljs * { color: inherit !important; }
 
     .theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 30px;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.25);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.35);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      transition: all 0.3s ease;
-      z-index: 1200;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-
-    .theme-toggle:hover {
-      transform: scale(1.1);
-      background: rgba(255,255,255,0.4);
-    }
-
-    body.dark-mode .theme-toggle {
-      background: rgba(0,0,0,0.3);
-      border-color: rgba(255,255,255,0.2);
-      color: #e0e0e0;
+      position: fixed; top: 20px; right: 30px; width: 48px; height: 48px;
+      border-radius: 50%; background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 24px;
+      z-index: 1200; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
   </style>
 </head>
-<body> <!-- 默认浅色模式，不加 class -->
+<body>
 
-  <!-- 右上角主题切换按钮 -->
-  <div class="theme-toggle" onclick="toggleTheme()" title="切换深色/浅色模式">
-    🌙
-  </div>
+  <div class="theme-toggle" onclick="toggleTheme()">🌙</div>
 
   <div class="bg-mask">
     <div class="layout">
@@ -259,7 +116,16 @@
   </div>
 
   <script>
-    // 菜单加载
+    // 初始化 marked：配置 highlight.js
+    marked.setOptions({
+      highlight: function(code, lang) {
+        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+        return hljs.highlight(code, { language }).value;
+      },
+      langPrefix: 'hljs language-' 
+    });
+
+    // 加载菜单
     fetch("notes.json")
       .then(res => res.json())
       .then(list => {
@@ -274,87 +140,42 @@
         });
       });
 
-    // 加载题解 + 完整渲染功能
     function loadNote(filename) {
       fetch(filename)
         .then(res => res.text())
         .then(md => {
-          // 解析 Markdown
+          // 渲染 Markdown (此时代码高亮已通过 setOptions 处理)
           const html = marked.parse(md);
-          const content = document.getElementById("content");
-          content.innerHTML = `<article>${html}</article>`;
+          const contentEl = document.getElementById("content");
+          contentEl.innerHTML = `<article>${html}</article>`;
 
-          // 1. 渲染 KaTeX（必须在 innerHTML 后立即调用）
+          // 渲染 KaTeX
           if (typeof renderMathInElement === 'function') {
-            renderMathInElement(content, {
+            renderMathInElement(contentEl, {
               delimiters: [
                 {left: '$$', right: '$$', display: true},
-                {left: '$', right: '$', display: false},
-                {left: '\\(', right: '\\)', display: false},
-                {left: '\\[', right: '\\]', display: true}
+                {left: '$', right: '$', display: false}
               ],
-              throwOnError: false,
-              strict: "ignore"
+              throwOnError: false
             });
           }
-
-          // 2. 高亮代码（必须在内容插入后手动调用）
-          if (typeof hljs !== 'undefined') {
-            document.querySelectorAll('pre code').forEach(block => {
-              // 确保每个 block 有 class="hljs"（highlight.js 需要）
-              if (!block.classList.contains('hljs')) {
-                block.classList.add('hljs');
-              }
-              hljs.highlightElement(block);
-            });
-          }
-
-          // 3. 强制覆盖动态内容的文字颜色（深浅模式）
-          const isDark = document.body.classList.contains("dark-mode");
-          const articles = document.querySelectorAll('article *');
-          articles.forEach(el => {
-            el.style.color = isDark ? '#e0e0e0' : '#111111';
-          });
         })
         .catch(err => {
-          console.error("加载题解失败", err);
-          document.getElementById("content").innerHTML = "<article><h2>加载失败</h2></article>";
+          console.error("加载失败", err);
         });
     }
 
-    // 页面初次加载时自动高亮（如果有静态内容）
-    document.addEventListener('DOMContentLoaded', () => {
-      if (typeof hljs !== 'undefined') {
-        hljs.highlightAll();
-      }
-    });
-
-    // 主题切换功能
     function toggleTheme() {
-      document.body.classList.toggle("dark-mode");
-      const isDark = document.body.classList.contains("dark-mode");
-      
-      const toggleBtn = document.querySelector(".theme-toggle");
-      toggleBtn.textContent = isDark ? "☀️" : "🌙";
-
+      const isDark = document.body.classList.toggle("dark-mode");
+      document.querySelector(".theme-toggle").textContent = isDark ? "☀️" : "🌙";
       localStorage.setItem("theme", isDark ? "dark" : "light");
-
-      // 切换后强制更新动态内容颜色
-      const articles = document.querySelectorAll('article *');
-      articles.forEach(el => {
-        el.style.color = isDark ? '#e0e0e0' : '#111111';
-      });
     }
 
-    // 加载时恢复主题（默认浅色）
-    window.addEventListener("load", () => {
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "dark") {
+    // 页面初次加载恢复主题
+    window.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("theme") === "dark") {
         document.body.classList.add("dark-mode");
         document.querySelector(".theme-toggle").textContent = "☀️";
-      } else {
-        document.body.classList.remove("dark-mode");
-        document.querySelector(".theme-toggle").textContent = "🌙";
       }
     });
   </script>
