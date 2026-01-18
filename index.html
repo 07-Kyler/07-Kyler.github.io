@@ -9,7 +9,7 @@
       width: 100%;
       height: 100%;
       margin: 0;
-      transition: background-image 0.6s ease;
+      transition: background-image 0.6s ease, color 0.4s ease;
     }
     body {
       display: flex;
@@ -24,12 +24,21 @@
       background-attachment: fixed;
     }
 
-    /* 默认浅色模式背景 */
+    /* 默认浅色模式背景 + 文字强制黑色 */
     body.dark-mode {
       background-image: url("assets/images/backgrounddark.jpg");
+      color: #e0e0e0;
     }
     body:not(.dark-mode) {
       background-image: url("assets/images/backgroundlight.jpg");
+      color: #111111 !important;
+    }
+
+    /* 强制浅色模式下所有文字为黑色（包括子元素） */
+    body:not(.dark-mode) *,
+    body:not(.dark-mode) *::before,
+    body:not(.dark-mode) *::after {
+      color: #111111 !important;
     }
 
     /* ===== Enter 容器 ===== */
@@ -38,21 +47,29 @@
       padding: 60px 80px;
       backdrop-filter: blur(28px) saturate(180%);
       -webkit-backdrop-filter: blur(28px) saturate(180%);
-      background: rgba(255, 255, 255, 0.18);
       border-radius: 28px;
       border: 1px solid rgba(255,255,255,0.35);
       box-shadow:
         0 20px 60px rgba(0,0,0,0.35),
         inset 0 1px 1px rgba(255,255,255,0.6);
-      color: #fff;
       transition:
         opacity 0.8s ease,
         transform 0.8s ease,
         background 0.4s ease,
-        color 0.4s ease;
+        color 0.4s ease,
+        border-color 0.4s ease,
+        box-shadow 0.4s ease;
     }
 
-    /* 深色模式调整（文字+毛玻璃更暗） */
+    body:not(.dark-mode) .enter-container {
+      background: rgba(255, 255, 255, 0.38);
+      border: 1px solid rgba(0,0,0,0.18);
+      box-shadow:
+        0 20px 60px rgba(0,0,0,0.25),
+        inset 0 1px 1px rgba(0,0,0,0.1);
+      color: #111111;
+    }
+
     body.dark-mode .enter-container {
       background: rgba(30, 30, 30, 0.65);
       border: 1px solid rgba(255,255,255,0.15);
@@ -81,27 +98,31 @@
       font-size: 16px;
       font-weight: 600;
       letter-spacing: 1px;
-      color: #111;
-      background: rgba(255,255,255,0.85);
       border: none;
       border-radius: 999px;
       cursor: pointer;
       transition:
         transform 0.2s ease,
-        background 0.2s ease;
-    }
-    .enter-btn:hover {
-      transform: translateY(-2px);
-      background: #ffffff;
+        background 0.2s ease,
+        color 0.2s ease;
     }
 
-    /* 深色模式下按钮调整 */
+    body:not(.dark-mode) .enter-btn {
+      color: #111111;
+      background: rgba(255,255,255,0.85);
+    }
+    body:not(.dark-mode) .enter-btn:hover {
+      background: #ffffff;
+      transform: translateY(-2px);
+    }
+
     body.dark-mode .enter-btn {
       color: #fff;
       background: rgba(255,255,255,0.25);
     }
     body.dark-mode .enter-btn:hover {
       background: rgba(255,255,255,0.45);
+      transform: translateY(-2px);
     }
 
     /* ===== 点击后的淡出动画 ===== */
@@ -128,7 +149,7 @@
       font-size: 24px;
       color: #fff;
       transition: all 0.3s ease;
-      z-index: 1000;
+      z-index: 1200; /* 最高层级，确保不被挡住 */
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
@@ -144,7 +165,7 @@
     }
   </style>
 </head>
-<body> <!-- 默认浅色模式，不加任何 class -->
+<body> <!-- 默认浅色模式，不加 class -->
 
   <!-- 右上角主题切换按钮 -->
   <div class="theme-toggle" onclick="toggleTheme()" title="切换深色/浅色模式">
