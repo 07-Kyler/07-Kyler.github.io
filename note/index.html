@@ -46,22 +46,28 @@
 
     /* 默认浅色模式 + 文字强制黑色 */
     body.dark-mode {
-      background-image: url("/note/assets/images/backgrounddark.jpg");
-      color: #e0e0e0;
+      background-image: url("../assets/images/backgrounddark.jpg");
+      color: #e0e0e0 !important;
     }
     body:not(.dark-mode) {
-      background-image: url("/note/assets/images/backgroundlight.jpg");
+      background-image: url("../assets/images/backgroundlight.jpg");
       color: #111111 !important;
     }
 
-    /* 强制浅色模式下所有文字为黑色（覆盖所有子元素） */
+    /* 强制所有文字颜色（覆盖动态内容） */
     body:not(.dark-mode) *,
     body:not(.dark-mode) *::before,
     body:not(.dark-mode) *::after {
       color: #111111 !important;
     }
 
-    /* 毛玻璃遮罩（适配模式） */
+    body.dark-mode *,
+    body.dark-mode *::before,
+    body.dark-mode *::after {
+      color: #e0e0e0 !important;
+    }
+
+    /* 毛玻璃遮罩 */
     .bg-mask {
       min-height: 100vh;
       background: rgba(0, 0, 0, 0.15);
@@ -79,7 +85,7 @@
       align-items: flex-start;
     }
 
-    /* 左侧导航栏（适配深浅模式） */
+    /* 左侧导航栏 */
     .sidebar {
       width: 260px;
       flex-shrink: 0;
@@ -89,7 +95,7 @@
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.30);
       transition: all 0.4s ease;
-      z-index: 900; /* 确保在主题按钮下方 */
+      z-index: 900;
     }
     body:not(.dark-mode) .sidebar {
       background: rgba(255,255,255,0.18);
@@ -119,7 +125,7 @@
       transition: all 0.25s ease;
     }
     body.dark-mode .sidebar a {
-      color: #e0e0e0;
+      color: #e0e0e0 !important;
     }
     .sidebar a:hover {
       transform: translateX(8px);
@@ -137,7 +143,7 @@
       display: flex;
     }
 
-    /* 正文卡片（适配模式） */
+    /* 正文卡片 */
     article {
       width: 100%;
       max-width: 980px;
@@ -157,21 +163,21 @@
     }
 
     article h1, article h2, article h3 {
-      color: #111111 !important; /* 浅色强制黑 */
+      color: #111111 !important;
     }
     body.dark-mode article h1,
     body.dark-mode article h2,
     body.dark-mode article h3 {
-      color: #e0e0e0;
+      color: #e0e0e0 !important;
     }
 
     article p, article li {
-      color: #111111 !important; /* 浅色强制黑 */
+      color: #111111 !important;
       line-height: 1.7;
     }
     body.dark-mode article p,
     body.dark-mode article li {
-      color: rgba(224,224,224,0.92);
+      color: #e0e0e0 !important;
     }
 
     article hr {
@@ -184,7 +190,7 @@
       background: rgba(255,255,255,0.15);
     }
 
-    /* 代码块优化 */
+    /* 代码块优化（适配深浅模式） */
     pre {
       background: rgba(30,30,30,0.7);
       padding: 20px 24px;
@@ -193,6 +199,9 @@
       overflow-x: auto;
       box-shadow: 0 4px 20px rgba(0,0,0,0.4);
       margin: 1.5em 0;
+    }
+    body:not(.dark-mode) pre {
+      background: rgba(0,0,0,0.25); /* 浅色模式下代码块更深黑 */
     }
     pre code.hljs {
       background: transparent !important;
@@ -211,7 +220,7 @@
       }
     }
 
-    /* 右上角主题切换按钮（z-index 最高，确保不被挡住） */
+    /* 右上角主题切换按钮 */
     .theme-toggle {
       position: fixed;
       top: 20px;
@@ -227,9 +236,8 @@
       align-items: center;
       justify-content: center;
       font-size: 24px;
-      color: #fff;
       transition: all 0.3s ease;
-      z-index: 1200; /* 最高层级 */
+      z-index: 1200;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
@@ -314,6 +322,18 @@
               hljs.highlightElement(block);
             });
           }
+
+          // 动态内容加载后，再强制执行一次颜色覆盖（针对深色模式）
+          const isDark = document.body.classList.contains("dark-mode");
+          if (isDark) {
+            document.querySelectorAll('article *').forEach(el => {
+              el.style.color = '#e0e0e0';
+            });
+          } else {
+            document.querySelectorAll('article *').forEach(el => {
+              el.style.color = '#111111';
+            });
+          }
         })
         .catch(err => {
           console.error("加载题解失败", err);
@@ -328,7 +348,7 @@
       }
     });
 
-    // 主题切换功能
+    // 主题切换功能（切换后强制刷新动态内容颜色）
     function toggleTheme() {
       document.body.classList.toggle("dark-mode");
       const isDark = document.body.classList.contains("dark-mode");
@@ -337,6 +357,12 @@
       toggleBtn.textContent = isDark ? "☀️" : "🌙";
 
       localStorage.setItem("theme", isDark ? "dark" : "light");
+
+      // 切换后强制更新所有动态内容的颜色
+      const articles = document.querySelectorAll('article *');
+      articles.forEach(el => {
+        el.style.color = isDark ? '#e0e0e0' : '#111111';
+      });
     }
 
     // 加载时恢复主题（默认浅色）
