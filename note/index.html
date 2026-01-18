@@ -4,271 +4,215 @@
   <meta charset="UTF-8" />
   <title>题解笔记</title>
 
-  <!-- KaTeX -->
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
-        crossorigin="anonymous">
+  <!-- ======================
+       KaTeX
+  ======================= -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{
+      delimiters:[
+        {left:'$$',right:'$$',display:true},
+        {left:'$',right:'$',display:false},
+        {left:'\\(',right:'\\)',display:false},
+        {left:'\\[',right:'\\]',display:true}
+      ],
+      throwOnError:false
+    });">
+  </script>
 
-  <!-- highlight.js -->
+  <!-- ======================
+       highlight.js
+  ======================= -->
   <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
 
-  <!-- marked -->
+  <!-- ======================
+       marked
+  ======================= -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
+  <!-- ======================
+       样式
+  ======================= -->
   <style>
+    /* ===== 全局 ===== */
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
+      color: #fff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-    }
-
-    body:not(.dark-mode) {
-      background-image: url("../assets/images/backgroundlight.jpg");
-      color: #111;
-    }
-
-    body.dark-mode {
-      background-image: url("../assets/images/backgrounddark.jpg");
-      color: #e0e0e0;
+      background: url("assets/images/background.jpg") center / cover fixed;
     }
 
     .bg-mask {
       min-height: 100vh;
-      background: rgba(0,0,0,0.15);
-    }
-    body.dark-mode .bg-mask {
-      background: rgba(30,30,30,0.45);
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(4px);
     }
 
+    body.light .bg-mask {
+      background: rgba(255,255,255,0.25);
+    }
+
+    /* ===== 布局 ===== */
     .layout {
       display: flex;
-      gap: 32px;
       padding: 120px 40px 60px;
-      align-items: flex-start;
+      gap: 32px;
+      max-width: 1400px;
+      margin: 0 auto;
     }
 
+    /* ===== 左侧导航（无小圆点） ===== */
     .sidebar {
       width: 260px;
-      padding: 20px 14px;
-      backdrop-filter: blur(18px);
+      padding: 18px;
       border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.30);
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
     }
 
-    body:not(.dark-mode) .sidebar {
-      background: rgba(255,255,255,0.18);
+    .sidebar ul {
+      list-style: none;       /* ✅ 关键：去掉小圆点 */
+      padding: 0;
+      margin: 0;
     }
 
-    body.dark-mode .sidebar {
-      background: rgba(30,30,30,0.65);
-      border-color: rgba(255,255,255,0.15);
+    .sidebar li {
+      margin-bottom: 12px;
     }
 
     .sidebar a {
       display: block;
       padding: 12px 16px;
-      font-size: 14px;
-      color: #fff;
+      border-radius: 12px;
       text-decoration: none;
-      background: rgba(255,255,255,0.14);
-      border-radius: 12px 24px 24px 12px;
-      border: 1px solid rgba(255,255,255,0.25);
-      transition: all 0.25s ease;
-      cursor: pointer;
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      transition: transform 0.2s, background 0.2s;
     }
 
     .sidebar a:hover {
-      transform: translateX(8px);
-      background: rgba(255,255,255,0.26);
+      transform: translateX(6px);
+      background: rgba(255,255,255,0.18);
     }
 
+    body.light .sidebar a {
+      color: #111;
+    }
+
+    /* ===== 右侧内容 ===== */
     .content {
       flex: 1;
-      display: flex;
+      padding: 40px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(16px);
     }
 
-    article {
-      width: 100%;
-      max-width: 980px;
-      padding: 36px 40px;
-      backdrop-filter: blur(20px);
-      border-radius: 28px;
-      border: 1px solid rgba(255,255,255,0.35);
+    body.light .content {
+      color: #111;
     }
 
-    body:not(.dark-mode) article {
-      background: rgba(255,255,255,0.20);
+    /* ===== Markdown 内容 ===== */
+    .content h1, .content h2, .content h3 {
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding-bottom: 6px;
     }
 
-    body.dark-mode article {
-      background: rgba(30,30,30,0.65);
-      border-color: rgba(255,255,255,0.15);
+    body.light .content h1,
+    body.light .content h2,
+    body.light .content h3 {
+      border-color: rgba(0,0,0,0.15);
     }
 
-    article hr {
-      border: none;
-      height: 1px;
-      margin: 2em 0;
-      background: rgba(255,255,255,0.25);
-    }
-
-    body:not(.dark-mode) article hr {
-      background: rgba(0,0,0,0.25);
-    }
-
-    /* ===== 代码块（完全保持你的原玻璃背景） ===== */
+    /* ===== 代码块（重点区域） ===== */
     pre {
-      background: rgba(30,30,30,0.7);
+      margin: 24px 0;
       padding: 20px 24px;
       border-radius: 16px;
-      border: 1px solid rgba(100,100,100,0.3);
       overflow-x: auto;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-      margin: 1.5em 0;
+
+      /* ✅ 玻璃感，不遮背景 */
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(14px);
     }
 
-    body:not(.dark-mode) pre {
-      background: rgba(0,0,0,0.25);
+    /* 深色模式：再浅一点，避免糊死 */
+    body:not(.light) pre {
+      background: rgba(0,0,0,0.28);
     }
 
-    pre code.hljs {
-      background: transparent !important;
+    /* 浅色模式：不动背景，只调字体 */
+    body.light pre {
+      background: rgba(255,255,255,0.35);
     }
 
-    /* ===============================
-       ✅ 只改字体：浅色模式高亮增强
-       不动背景、不动 blur
-    =============================== */
-    body:not(.dark-mode) .hljs {
-      color: #1f2328;
+    /* ===== 高亮字体对比度修正（只改字体） ===== */
+    body.light .hljs {
+      color: #1a1a1a;
     }
 
-    body:not(.dark-mode) .hljs-keyword,
-    body:not(.dark-mode) .hljs-type,
-    body:not(.dark-mode) .hljs-built_in {
-      color: #003a8f;
+    body.light .hljs-keyword,
+    body.light .hljs-title,
+    body.light .hljs-built_in {
+      color: #0033aa;
       font-weight: 600;
     }
 
-    body:not(.dark-mode) .hljs-string {
-      color: #207245;
+    body.light .hljs-string {
+      color: #006400;
     }
 
-    body:not(.dark-mode) .hljs-number {
-      color: #a31515;
+    body.light .hljs-number {
+      color: #8b0000;
     }
 
-    body:not(.dark-mode) .hljs-comment {
-      color: #6a737d;
+    body.light .hljs-comment {
+      color: #555;
       font-style: italic;
     }
 
-    body:not(.dark-mode) .hljs-function,
-    body:not(.dark-mode) .hljs-title {
-      color: #5a32a3;
-    }
-
-    /* theme toggle */
-    .theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 30px;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.25);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.35);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      z-index: 1200;
-    }
-
-    body.dark-mode .theme-toggle {
-      background: rgba(0,0,0,0.3);
-      color: #e0e0e0;
+    /* 禁止主题背景覆盖 */
+    pre code.hljs {
+      background: transparent !important;
     }
   </style>
 </head>
 
 <body>
-<div class="theme-toggle" onclick="toggleTheme()">🌙</div>
-
 <div class="bg-mask">
   <div class="layout">
     <aside class="sidebar">
-      <h2>📘 题解目录</h2>
-      <ul id="menu"></ul>
-      <hr />
-      <a href="/home.html">← 返回首页</a>
+      <ul id="nav"></ul>
     </aside>
 
-    <main class="content" id="content">
-      <article><h2>请选择题解</h2></article>
-    </main>
+    <main class="content" id="content"></main>
   </div>
 </div>
 
 <script>
-  marked.setOptions({ langPrefix: 'language-' });
-
-  fetch("notes.json").then(r => r.json()).then(list => {
-    const menu = document.getElementById("menu");
-    list.forEach(i => {
-      const a = document.createElement("a");
-      a.textContent = i.title;
-      a.onclick = () => loadNote(i.file);
-      const li = document.createElement("li");
-      li.appendChild(a);
-      menu.appendChild(li);
-    });
-  });
-
-  function loadNote(file) {
-    fetch(file).then(r => r.text()).then(md => {
-      const html = marked.parse(md);
-      const content = document.getElementById("content");
-      content.innerHTML = `<article>${html}</article>`;
-
-      content.querySelectorAll("pre code").forEach(b => {
-        hljs.highlightElement(b);
-      });
-
-      renderMathInElement(content, {
-        delimiters: [
-          {left:"$$", right:"$$", display:true},
-          {left:"$", right:"$", display:false}
-        ],
-        throwOnError:false
-      });
-    });
-  }
-
-  function toggleTheme() {
-    document.body.classList.toggle("dark-mode");
-    const d = document.body.classList.contains("dark-mode");
-    document.querySelector(".theme-toggle").textContent = d ? "☀️" : "🌙";
-    localStorage.setItem("theme", d ? "dark" : "light");
-  }
-
-  window.addEventListener("load", () => {
-    if (localStorage.getItem("theme") === "dark") {
-      document.body.classList.add("dark-mode");
-      document.querySelector(".theme-toggle").textContent = "☀️";
+/* ======================
+   marked + highlight 强绑定
+====================== */
+marked.setOptions({
+  highlight: function(code, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      return hljs.highlight(code, { language: lang }).value;
     }
+    return hljs.highlightAuto(code).value;
+  }
+});
+
+/* 示例：加载 markdown */
+fetch("example.md")
+  .then(res => res.text())
+  .then(md => {
+    document.getElementById("content").innerHTML = marked.parse(md);
+    hljs.highlightAll();   // ✅ 强制执行
   });
 </script>
 </body>
