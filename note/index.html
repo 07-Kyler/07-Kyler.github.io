@@ -17,7 +17,7 @@
         throwOnError : false
       });"></script>
 
-  <!-- highlight.js 核心 + 暗主题（github-dark 高级暗黑风格） -->
+  <!-- highlight.js 核心 + 暗主题（github-dark） -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
 
   <!-- highlight.js 主文件 + C++ 支持 -->
@@ -201,7 +201,7 @@
       margin: 1.5em 0;
     }
     body:not(.dark-mode) pre {
-      background: rgba(0,0,0,0.25); /* 浅色模式下代码块更深黑 */
+      background: rgba(0,0,0,0.25);
     }
     pre code.hljs {
       background: transparent !important;
@@ -266,7 +266,8 @@
         <h2>📘 题解目录</h2>
         <ul id="menu"></ul>
         <hr />
-        <a href="/">← 返回首页</a>
+        <!-- 修改：点击返回首页时直接跳到 home.html，而不是根目录 -->
+        <a href="../home.html">← 返回首页</a>
       </aside>
 
       <main class="content" id="content">
@@ -294,7 +295,7 @@
         });
       });
 
-    // 加载单篇题解 + 渲染数学公式 + 高亮代码（完整恢复渲染部分）
+    // 加载单篇题解 + 渲染数学公式 + 高亮代码
     function loadNote(filename) {
       fetch(filename)
         .then(res => res.text())
@@ -323,7 +324,7 @@
             });
           }
 
-          // 动态内容加载后，再强制执行一次颜色覆盖（确保深浅模式文字正确）
+          // 动态内容加载后强制颜色覆盖
           const isDark = document.body.classList.contains("dark-mode");
           const articles = document.querySelectorAll('article *');
           articles.forEach(el => {
@@ -343,7 +344,7 @@
       }
     });
 
-    // 主题切换功能（切换后强制刷新动态内容颜色）
+    // 主题切换功能
     function toggleTheme() {
       document.body.classList.toggle("dark-mode");
       const isDark = document.body.classList.contains("dark-mode");
@@ -353,7 +354,7 @@
 
       localStorage.setItem("theme", isDark ? "dark" : "light");
 
-      // 切换后强制更新所有动态内容的颜色
+      // 切换后强制更新动态内容颜色
       const articles = document.querySelectorAll('article *');
       articles.forEach(el => {
         el.style.color = isDark ? '#e0e0e0' : '#111111';
