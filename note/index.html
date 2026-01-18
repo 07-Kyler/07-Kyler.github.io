@@ -4,11 +4,13 @@
   <!-- KaTeX CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
 
-  <!-- KaTeX JS + auto-render -->
+  <!-- KaTeX JS -->
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+
+  <!-- KaTeX auto-render -->
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 
-  <!-- highlight.js 核心 + 暗主题（github-dark） -->
+  <!-- highlight.js 核心 + 暗主题（github-dark 高级暗黑风格） -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
 
   <!-- highlight.js 主文件 + C++ 支持 -->
@@ -20,9 +22,6 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <style>
-    /* ======================
-       全局背景（支持深浅模式切换）
-    ====================== */
     html, body {
       margin: 0;
       padding: 0;
@@ -35,7 +34,6 @@
       background-attachment: fixed;
     }
 
-    /* 默认浅色模式 + 文字强制黑色 */
     body.dark-mode {
       background-image: url("../assets/images/backgrounddark.jpg");
       color: #e0e0e0 !important;
@@ -45,7 +43,6 @@
       color: #111111 !important;
     }
 
-    /* 强制所有文字颜色（覆盖动态内容） */
     body:not(.dark-mode) *,
     body:not(.dark-mode) *::before,
     body:not(.dark-mode) *::after {
@@ -58,7 +55,6 @@
       color: #e0e0e0 !important;
     }
 
-    /* 毛玻璃遮罩 */
     .bg-mask {
       min-height: 100vh;
       background: rgba(0, 0, 0, 0.15);
@@ -68,7 +64,6 @@
       background: rgba(30, 30, 30, 0.45);
     }
 
-    /* 主布局 */
     .layout {
       display: flex;
       gap: 32px;
@@ -76,7 +71,6 @@
       align-items: flex-start;
     }
 
-    /* 左侧导航栏 */
     .sidebar {
       width: 260px;
       flex-shrink: 0;
@@ -128,13 +122,11 @@
       border-color: rgba(255,255,255,0.35);
     }
 
-    /* 右侧内容区 */
     .content {
       flex: 1;
       display: flex;
     }
 
-    /* 正文卡片 */
     article {
       width: 100%;
       max-width: 980px;
@@ -181,7 +173,6 @@
       background: rgba(255,255,255,0.15);
     }
 
-    /* 代码块优化 */
     pre {
       background: rgba(30,30,30,0.7);
       padding: 20px 24px;
@@ -198,7 +189,6 @@
       background: transparent !important;
     }
 
-    /* 响应式 */
     @media (max-width: 900px) {
       .layout {
         flex-direction: column;
@@ -211,7 +201,6 @@
       }
     }
 
-    /* 右上角主题切换按钮 */
     .theme-toggle {
       position: fixed;
       top: 20px;
@@ -285,16 +274,17 @@
         });
       });
 
-    // 加载题解 + 完整渲染（数学公式 + 代码高亮）
+    // 加载题解 + 完整渲染功能
     function loadNote(filename) {
       fetch(filename)
         .then(res => res.text())
         .then(md => {
+          // 解析 Markdown
           const html = marked.parse(md);
           const content = document.getElementById("content");
           content.innerHTML = `<article>${html}</article>`;
 
-          // 渲染 KaTeX 数学公式
+          // 1. 渲染 KaTeX（必须在 innerHTML 后立即调用）
           if (typeof renderMathInElement === 'function') {
             renderMathInElement(content, {
               delimiters: [
@@ -308,14 +298,18 @@
             });
           }
 
-          // 高亮代码块
+          // 2. 高亮代码（必须在内容插入后手动调用）
           if (typeof hljs !== 'undefined') {
             document.querySelectorAll('pre code').forEach(block => {
+              // 确保每个 block 有 class="hljs"（highlight.js 需要）
+              if (!block.classList.contains('hljs')) {
+                block.classList.add('hljs');
+              }
               hljs.highlightElement(block);
             });
           }
 
-          // 强制颜色覆盖（深浅模式适配）
+          // 3. 强制覆盖动态内容的文字颜色（深浅模式）
           const isDark = document.body.classList.contains("dark-mode");
           const articles = document.querySelectorAll('article *');
           articles.forEach(el => {
@@ -328,7 +322,7 @@
         });
     }
 
-    // 页面加载后自动高亮（如果有静态内容）
+    // 页面初次加载时自动高亮（如果有静态内容）
     document.addEventListener('DOMContentLoaded', () => {
       if (typeof hljs !== 'undefined') {
         hljs.highlightAll();
