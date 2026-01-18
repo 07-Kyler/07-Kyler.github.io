@@ -1,76 +1,88 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <title>题解笔记</title>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 
-  <!-- ========== KaTeX ========== -->
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
-        crossorigin="anonymous">
-
-  <script defer
-          src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
-          crossorigin="anonymous"></script>
-
-  <script defer
-          src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
-          crossorigin="anonymous"
-          onload="renderMathInElement(document.body,{
-            delimiters:[
-              {left:'$$',right:'$$',display:true},
-              {left:'$',right:'$',display:false},
-              {left:'\\\\(',right:'\\\\)',display:false},
-              {left:'\\\\[',right:'\\\\]',display:true}
-            ],
-            throwOnError:false
-          });"></script>
-
-  <!-- ========== highlight.js（保持你可用的那一版） ========== -->
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
-
+  <!-- highlight.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
 
-  <!-- ========== marked ========== -->
+  <meta charset="UTF-8">
+  <title>题解笔记</title>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <style>
-    /* ======================
-       原有布局 / 玻璃效果
-       （这里假设你原来的 CSS 全在）
-       ====================== */
-
+    /* 你的原样式，未改布局 */
     html, body {
       margin: 0;
       padding: 0;
+      height: 100%;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-size: cover;
+      background-attachment: fixed;
     }
 
-    /* ======== 关键修复点 ① ========
-       不再用 * + !important 覆盖一切
-       只控制正文，不影响 code / span
-    */
-    body:not(.dark-mode) article,
-    body:not(.dark-mode) article *:not(code):not(span) {
-      color: #111111;
-    }
-
-    body.dark-mode article,
-    body.dark-mode article *:not(code):not(span) {
+    body.dark-mode {
+      background-image: url("../assets/images/backgrounddark.jpg");
       color: #e0e0e0;
     }
+    body:not(.dark-mode) {
+      background-image: url("../assets/images/backgroundlight.jpg");
+      color: #111;
+    }
 
-    /* ======== 保留你原来的代码块玻璃背景 ======== */
+    .layout {
+      display: flex;
+      gap: 32px;
+      padding: 120px 40px 60px;
+    }
+
+    .sidebar {
+      width: 260px;
+      padding: 20px 14px;
+      backdrop-filter: blur(18px);
+      border-radius: 20px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 12px 16px;
+      text-decoration: none;
+      border-radius: 12px 24px 24px 12px;
+      transition: 0.25s;
+    }
+
+    .sidebar a:hover {
+      transform: translateX(8px);
+    }
+
+    article {
+      max-width: 980px;
+      padding: 36px 40px;
+      backdrop-filter: blur(20px);
+      border-radius: 28px;
+    }
+
+    /* 代码块背景：保持你原来的玻璃感 */
     pre {
-      padding: 18px 22px;
+      background: rgba(30,30,30,0.65);
+      padding: 20px 24px;
       border-radius: 16px;
       overflow-x: auto;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      background: rgba(30, 30, 30, 0.35);
-      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    body:not(.dark-mode) pre {
+      background: rgba(0,0,0,0.25);
     }
 
     pre code.hljs {
@@ -79,49 +91,63 @@
   </style>
 </head>
 
-<body class="dark-mode">
-  <div class="container">
-    <!-- 左侧：题解导航（结构不动） -->
-    <aside id="sidebar">
-      <!-- 你原来的导航内容 -->
-    </aside>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <h2>题解目录</h2>
+    <ul id="menu"></ul>
+  </aside>
 
-    <!-- 右侧：题解内容 -->
-    <main>
-      <article id="content"></article>
-    </main>
-  </div>
+  <main id="content">
+    <article>
+      <h2>请选择题解</h2>
+    </article>
+  </main>
+</div>
 
-  <script>
-    /* ======================
-       marked + highlight.js
-       ====================== */
-
-    async function loadMarkdown(path) {
-      const res = await fetch(path);
-      const md = await res.text();
-
-      const html = marked.parse(md, {
-        breaks: true,
-        gfm: true
+<script>
+  fetch("notes.json")
+    .then(r => r.json())
+    .then(list => {
+      const menu = document.getElementById("menu");
+      list.forEach(item => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.textContent = item.title;
+        a.onclick = () => loadNote(item.file);
+        li.appendChild(a);
+        menu.appendChild(li);
       });
+    });
 
-      const content = document.getElementById("content");
-      content.innerHTML = html;
+  function loadNote(file) {
+    fetch(file)
+      .then(r => r.text())
+      .then(md => {
+        const html = marked.parse(md);
+        const content = document.getElementById("content");
+        content.innerHTML = `<article>${html}</article>`;
 
-      /* ======== 关键修复点 ② ========
-         确保在 marked 渲染完成后高亮
-      */
-      content.querySelectorAll("pre code").forEach(block => {
-        if (!block.classList.contains("hljs")) {
-          block.classList.add("hljs");
-        }
-        hljs.highlightElement(block);
+        renderMathInElement(content, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ],
+          throwOnError: false
+        });
+
+        document.querySelectorAll('pre code').forEach(block => {
+          hljs.highlightElement(block);
+        });
+
+        const isDark = document.body.classList.contains("dark-mode");
+        document.querySelectorAll('article *').forEach(el => {
+          if (!el.closest('pre, code')) {
+            el.style.color = isDark ? '#e0e0e0' : '#111';
+          }
+        });
       });
-    }
-
-    /* 示例：加载某篇题解 */
-    loadMarkdown("solutions/example.md");
-  </script>
+  }
+</script>
 </body>
 </html>
