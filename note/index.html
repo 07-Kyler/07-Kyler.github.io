@@ -44,14 +44,21 @@
       background-attachment: fixed;
     }
 
-    /* 默认浅色模式 */
+    /* 默认浅色模式 + 文字强制黑色 */
     body.dark-mode {
       background-image: url("/note/assets/images/backgrounddark.jpg");
       color: #e0e0e0;
     }
     body:not(.dark-mode) {
       background-image: url("/note/assets/images/backgroundlight.jpg");
-      color: #111;
+      color: #111111 !important;
+    }
+
+    /* 强制浅色模式下所有文字为黑色（覆盖所有子元素） */
+    body:not(.dark-mode) *,
+    body:not(.dark-mode) *::before,
+    body:not(.dark-mode) *::after {
+      color: #111111 !important;
     }
 
     /* 毛玻璃遮罩（适配模式） */
@@ -82,6 +89,7 @@
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.30);
       transition: all 0.4s ease;
+      z-index: 900; /* 确保在主题按钮下方 */
     }
     body:not(.dark-mode) .sidebar {
       background: rgba(255,255,255,0.18);
@@ -103,7 +111,6 @@
       display: block;
       padding: 12px 16px;
       font-size: 14px;
-      color: #ffffff;
       text-decoration: none;
       cursor: pointer;
       background: rgba(255,255,255,0.14);
@@ -150,7 +157,7 @@
     }
 
     article h1, article h2, article h3 {
-      color: #ffffff;
+      color: #111111 !important; /* 浅色强制黑 */
     }
     body.dark-mode article h1,
     body.dark-mode article h2,
@@ -159,7 +166,7 @@
     }
 
     article p, article li {
-      color: rgba(255,255,255,0.92);
+      color: #111111 !important; /* 浅色强制黑 */
       line-height: 1.7;
     }
     body.dark-mode article p,
@@ -204,7 +211,7 @@
       }
     }
 
-    /* 右上角主题切换按钮 */
+    /* 右上角主题切换按钮（z-index 最高，确保不被挡住） */
     .theme-toggle {
       position: fixed;
       top: 20px;
@@ -222,7 +229,7 @@
       font-size: 24px;
       color: #fff;
       transition: all 0.3s ease;
-      z-index: 1000;
+      z-index: 1200; /* 最高层级 */
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
