@@ -17,13 +17,20 @@
         throwOnError : false
       });"></script>
 
+  <!-- highlight.js 核心 + 暗主题（github-dark 高级暗黑风格） -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+
+  <!-- highlight.js 主文件 + C++ 支持 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+
   <meta charset="UTF-8" />
   <title>题解笔记</title>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
   <style>
     /* ======================
-       全局背景（关键修正）
-       GitHub Pages 必须用绝对路径
+       全局背景
     ====================== */
     html, body {
       margin: 0;
@@ -37,25 +44,22 @@
       background-repeat: no-repeat;
       background-attachment: fixed;
     }
-    /* ======================
-       页面毛玻璃遮罩（透明度降低）
-    ====================== */
+
+    /* 毛玻璃遮罩 */
     .bg-mask {
       min-height: 100vh;
-      background: rgba(0, 0, 0, 0.15); /* 原来 0.35 太灰 */
+      background: rgba(0, 0, 0, 0.15);
     }
-    /* ======================
-       页面主布局
-    ====================== */
+
+    /* 主布局 */
     .layout {
       display: flex;
       gap: 32px;
       padding: 120px 40px 60px;
       align-items: flex-start;
     }
-    /* ======================
-       左侧导航栏（保留）
-    ====================== */
+
+    /* 左侧导航栏 */
     .sidebar {
       width: 260px;
       flex-shrink: 0;
@@ -66,14 +70,17 @@
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.30);
     }
+
     .sidebar ul {
       list-style: none;
       padding: 0;
       margin: 0;
     }
+
     .sidebar li {
       margin-bottom: 12px;
     }
+
     .sidebar a {
       display: block;
       padding: 12px 16px;
@@ -86,18 +93,19 @@
       border: 1px solid rgba(255,255,255,0.25);
       transition: all 0.25s ease;
     }
+
     .sidebar a:hover {
       transform: translateX(8px);
       background: rgba(255,255,255,0.26);
       border-color: rgba(255,255,255,0.45);
     }
-    /* ======================
-       右侧内容区（关键：宽度利用）
-    ====================== */
+
+    /* 右侧内容区 */
     .content {
       flex: 1;
       display: flex;
     }
+
     /* 正文卡片 */
     article {
       width: 100%;
@@ -109,35 +117,39 @@
       border-radius: 28px;
       border: 1px solid rgba(255,255,255,0.35);
     }
-    article h1,
-    article h2,
-    article h3 {
+
+    article h1, article h2, article h3 {
       color: #ffffff;
     }
-    article p,
-    article li {
+
+    article p, article li {
       color: rgba(255,255,255,0.92);
       line-height: 1.7;
     }
+
     article hr {
       border: none;
       height: 1px;
       background: rgba(255,255,255,0.25);
       margin: 32px 0;
     }
-    /* 代码块 */
+
+    /* 代码块优化 - 与 highlight.js 配合 */
     pre {
-      background: rgba(0,0,0,0.55);
-      padding: 18px 20px;
+      background: rgba(30,30,30,0.7);
+      padding: 20px 24px;
       border-radius: 16px;
+      border: 1px solid rgba(100,100,100,0.3);
       overflow-x: auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      margin: 1.5em 0;
     }
-    code {
-      color: #9be9ff;
+
+    pre code.hljs {
+      background: transparent !important;
     }
-    /* ======================
-       响应式
-    ====================== */
+
+    /* 响应式 */
     @media (max-width: 900px) {
       .layout {
         flex-direction: column;
@@ -160,6 +172,7 @@
       <hr />
       <a href="/">← 返回首页</a>
     </aside>
+
     <main class="content" id="content">
       <article>
         <h2>客官想看哪篇题解</h2>
@@ -170,6 +183,7 @@
 </div>
 
 <script>
+// 菜单加载
 fetch("notes.json")
   .then(res => res.json())
   .then(list => {
@@ -184,15 +198,15 @@ fetch("notes.json")
     });
   });
 
+// 加载单篇题解 + 渲染数学公式 + 高亮代码
 function loadNote(filename) {
   fetch(filename)
     .then(res => res.text())
     .then(md => {
       const html = marked.parse(md);
-      const article = `<article>${html}</article>`;
-      document.getElementById("content").innerHTML = article;
+      document.getElementById("content").innerHTML = `<article>${html}</article>`;
 
-      // 手动渲染 KaTeX（每次加载新内容后都执行）
+      // 渲染 KaTeX 数学公式
       if (typeof renderMathInElement === 'function') {
         renderMathInElement(document.getElementById("content"), {
           delimiters: [
@@ -205,12 +219,26 @@ function loadNote(filename) {
           strict: "ignore"
         });
       }
+
+      // 高亮所有代码块
+      if (typeof hljs !== 'undefined') {
+        document.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightElement(block);
+        });
+      }
     })
     .catch(err => {
       console.error("加载题解失败", err);
       document.getElementById("content").innerHTML = "<article><h2>加载失败</h2></article>";
     });
 }
+
+// 页面加载完成后自动高亮（针对初始内容，如果有）
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof hljs !== 'undefined') {
+    hljs.highlightAll();
+  }
+});
 </script>
 </body>
 </html>
