@@ -10,8 +10,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 
   <!-- highlight.js -->
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
 
@@ -19,198 +18,189 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <style>
-    /* ================= 全局 ================= */
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background-attachment: fixed;
       background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
     }
 
     body {
-      background-image: url("assets/images/background.jpg");
-      color: #111;
-    }
-
-    body.dark-mode {
+      background-image: url("../assets/images/background.jpg");
       color: #e0e0e0;
     }
 
     .bg-mask {
       min-height: 100vh;
-      background: rgba(0,0,0,0.15);
+      background: rgba(0,0,0,0.35);
     }
 
-    body.dark-mode .bg-mask {
-      background: rgba(30,30,30,0.45);
-    }
-
-    /* ================= 布局 ================= */
     .layout {
       display: flex;
       gap: 32px;
-      padding: 120px 40px;
+      padding: 120px 40px 60px;
     }
 
-    aside {
+    /* 左侧导航 */
+    .sidebar {
       width: 260px;
+      padding: 20px 14px;
       backdrop-filter: blur(18px);
+      background: rgba(30,30,30,0.55);
       border-radius: 20px;
-      padding: 20px;
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.15);
     }
 
-    body.dark-mode aside {
-      background: rgba(30,30,30,0.6);
-      border-color: rgba(255,255,255,0.15);
+    .sidebar h2 {
+      margin-top: 0;
+      font-size: 18px;
     }
 
-    aside ul {
+    .sidebar ul {
       list-style: none;
       padding: 0;
       margin: 0;
     }
 
-    aside a {
-      display: block;
-      padding: 12px 16px;
+    .sidebar li {
       margin-bottom: 10px;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 10px 14px;
       text-decoration: none;
+      color: #e0e0e0;
+      background: rgba(255,255,255,0.08);
       border-radius: 12px 24px 24px 12px;
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+
+    .sidebar a:hover {
+      transform: translateX(8px);
       background: rgba(255,255,255,0.18);
-      transition: all .25s;
     }
 
-    aside a:hover {
-      transform: translateX(6px);
+    /* 右侧内容 */
+    .content {
+      flex: 1;
     }
 
-    main article {
+    article {
       max-width: 980px;
-      padding: 40px;
-      border-radius: 28px;
+      padding: 36px 40px;
       backdrop-filter: blur(20px);
-      background: rgba(255,255,255,0.2);
-      border: 1px solid rgba(255,255,255,0.35);
-    }
-
-    body.dark-mode main article {
       background: rgba(30,30,30,0.55);
-      border-color: rgba(255,255,255,0.15);
-    }
-
-    /* ================= Markdown ================= */
-    article hr {
-      border: none;
-      height: 1px;
-      background: rgba(120,120,120,0.35);
-      margin: 2em 0;
-    }
-
-    /* ================= 代码块 ================= */
-    pre {
-      background: rgba(30,30,30,0.45); /* 通透，不遮背景 */
-      padding: 20px 24px;
-      border-radius: 16px;
-      overflow-x: auto;
+      border-radius: 28px;
       border: 1px solid rgba(255,255,255,0.15);
     }
 
-    body.dark-mode pre {
-      background: rgba(30,30,30,0.35);
+    article h1, article h2, article h3 {
+      margin-top: 1.4em;
+    }
+
+    article p, article li {
+      line-height: 1.7;
+    }
+
+    /* Markdown 分割线修正 */
+    article hr {
+      border: none;
+      height: 1px;
+      background: rgba(255,255,255,0.25);
+      margin: 32px 0;
+    }
+
+    /* 代码块（只负责外观，不碰背景玻璃） */
+    pre {
+      padding: 18px 22px;
+      border-radius: 16px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.12);
+      overflow-x: auto;
+      margin: 1.5em 0;
+    }
+
+    pre code {
+      font-family: Consolas, Monaco, monospace;
+      font-size: 14px;
     }
 
     pre code.hljs {
       background: transparent !important;
     }
 
-    /* 浅色模式：只加深代码字体 */
-    body:not(.dark-mode) pre code {
-      color: #f8f8f2;
-    }
-
-    /* ================= 主题按钮 ================= */
-    .theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 30px;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      backdrop-filter: blur(10px);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
+    @media (max-width: 900px) {
+      .layout {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+      }
     }
   </style>
 </head>
 
 <body>
-<div class="theme-toggle" onclick="toggleTheme()">🌙</div>
-
 <div class="bg-mask">
   <div class="layout">
-    <aside>
-      <h3>题解目录</h3>
-      <ul>
-        <li><a href="#">示例题解</a></li>
-      </ul>
+    <aside class="sidebar">
+      <h2>题解目录</h2>
+      <ul id="menu"></ul>
     </aside>
 
-    <main id="content"></main>
+    <main class="content" id="content">
+      <article>
+        <h2>请选择左侧题解</h2>
+        <p>(^_^)</p>
+      </article>
+    </main>
   </div>
 </div>
 
 <script>
-  /* ===== 最稳：内联 Markdown ===== */
-  const md = `
-## ABC 示例题
+  // 加载目录
+  fetch("notes.json")
+    .then(res => res.json())
+    .then(list => {
+      const menu = document.getElementById("menu");
+      list.forEach(item => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.textContent = item.title;
+        a.onclick = () => loadNote(item.file);
+        li.appendChild(a);
+        menu.appendChild(li);
+      });
+    });
 
----
+  function loadNote(file) {
+    fetch(file)
+      .then(res => res.text())
+      .then(md => {
+        const html = marked.parse(md);
+        const content = document.getElementById("content");
+        content.innerHTML = `<article>${html}</article>`;
 
-### 思路
+        // KaTeX
+        renderMathInElement(content, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ],
+          throwOnError: false
+        });
 
-这是一个示例。
-
-\`\`\`cpp
-#include <bits/stdc++.h>
-using namespace std;
-
-int main() {
-    cout << "Hello World";
-}
-\`\`\`
-
-公式测试：$a^2 + b^2 = c^2$
-`;
-
-  marked.setOptions({
-    highlight(code, lang) {
-      if (lang && hljs.getLanguage(lang)) {
-        return hljs.highlight(code, { language: lang }).value;
-      }
-      return hljs.highlightAuto(code).value;
-    }
-  });
-
-  const content = document.getElementById("content");
-  content.innerHTML = `<article>${marked.parse(md)}</article>`;
-
-  renderMathInElement(content, {
-    delimiters: [
-      {left: "$$", right: "$$", display: true},
-      {left: "$", right: "$", display: false}
-    ],
-    throwOnError: false
-  });
-
-  function toggleTheme() {
-    document.body.classList.toggle("dark-mode");
+        // 代码高亮（最稳）
+        content.querySelectorAll("pre code").forEach(block => {
+          hljs.highlightElement(block);
+        });
+      });
   }
 </script>
 </body>
