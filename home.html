@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>MY PERSONAL WEEEEEEEB!</title>
-
   <style>
 /* =========================
    全局 & 背景
@@ -11,18 +10,15 @@
 * {
   box-sizing: border-box;
 }
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
                "PingFang SC", "Microsoft YaHei", sans-serif;
   color: #ffffff;
-
   background: url("assets/images/background.jpg")
               no-repeat center center fixed;
   background-size: cover;
 }
-
 /* =========================
    顶部标题（固定）
 ========================= */
@@ -30,17 +26,14 @@ header {
   position: sticky;
   top: 0;
   z-index: 1000;
-
   padding: 20px 40px;
   font-size: 20px;
   font-weight: 600;
-
   backdrop-filter: blur(16px) saturate(140%);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
   background: rgba(255,255,255,0.18);
   border-bottom: 1px solid rgba(255,255,255,0.25);
 }
-
 /* =========================
    导航栏（固定在标题下）
 ========================= */
@@ -48,31 +41,25 @@ nav {
   position: sticky;
   top: 64px;
   z-index: 900;
-
   display: flex;
   gap: 10px;
   padding: 14px 40px;
-
   backdrop-filter: blur(16px) saturate(140%);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
   background: rgba(255,255,255,0.15);
 }
-
 nav button {
   padding: 6px 14px;
   border-radius: 10px;
   border: none;
   cursor: pointer;
-
   background: rgba(255,255,255,0.25);
   color: #ffffff;
   font-weight: 500;
 }
-
 nav button.active {
   background: rgba(255,255,255,0.45);
 }
-
 /* =========================
    主体区域（关键）
 ========================= */
@@ -82,7 +69,6 @@ main {
   margin: 0 auto;
   padding: 80px 40px 60px;
 }
-
 /* =========================
    阅读卡片（居中 + 留右侧安全区）
 ========================= */
@@ -92,19 +78,15 @@ main {
   margin-right: 320px; /* 给右侧数据卡片留空间 */
   margin-bottom: 50px;
   padding: 36px 40px;
-
   backdrop-filter: blur(26px) saturate(160%);
   -webkit-backdrop-filter: blur(26px) saturate(160%);
   background: rgba(255,255,255,0.18);
-
   border-radius: 22px;
   border: 1px solid rgba(255,255,255,0.3);
-
   box-shadow:
     0 12px 40px rgba(0,0,0,0.25),
     inset 0 1px 1px rgba(255,255,255,0.5);
 }
-
 /* =========================
    右侧网站数据卡片（只相对 main）
 ========================= */
@@ -112,33 +94,26 @@ main {
   position: absolute;
   top: 220px;
   right: 40px;
-
   width: 250px;
   padding: 22px 20px;
-
   backdrop-filter: blur(28px) saturate(170%);
   -webkit-backdrop-filter: blur(28px) saturate(170%);
   background: rgba(255,255,255,0.16);
-
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.3);
-
   box-shadow:
     0 14px 40px rgba(0,0,0,0.35),
     inset 0 1px 1px rgba(255,255,255,0.5);
 }
-
 /* =========================
    模块显示控制
 ========================= */
 .module {
   display: none;
 }
-
 .module.active {
   display: block;
 }
-
 /* =========================
    关键：半屏 / 小屏强制切布局
 ========================= */
@@ -147,7 +122,6 @@ main {
     margin-right: 0;
     max-width: 100%;
   }
-
   #site-stats {
     position: static;
     width: auto;
@@ -155,36 +129,24 @@ main {
   }
 }
 </style>
-
-
-
-
-
 </head>
-
 <body>
-
 <header>我的成长路径</header>
-
 <div id="site-stats">
   <h3>SITE STATUS</h3>
-
   <div class="stat-item">
     <span class="stat-label">已运行：</span>
     <span class="stat-value" id="site-runtime">计算中...</span>
   </div>
-
   <div class="stat-item">
     <span class="stat-label">题解数量：</span>
-    <span class="stat-value" id="article-count">0</span>
+    <span class="stat-value" id="article-count">计算中...</span>
   </div>
-
   <div class="stat-item">
     <span class="stat-label">最后更新：</span>
-    <span class="stat-value" id="last-update">—</span>
+    <span class="stat-value" id="last-update">计算中...</span>
   </div>
 </div>
-
 <nav>
   <button class="active" onclick="showModule('home', this)">首页</button>
   <button onclick="showModule('roadmap', this)">学习路线</button>
@@ -193,7 +155,6 @@ main {
   <button onclick="showModule('about', this)">关于我</button>
   <button onclick="location.href='/note/'">题解笔记</button>
 </nav>
-
 <main>
   <div id="home" class="module active">
     <div class="card">
@@ -201,7 +162,6 @@ main {
       <p>这是我用来长期记录学习和成长的个人网站。</p>
     </div>
   </div>
-
   <div id="roadmap" class="module">
     <div class="card">
       <h2>学习路线</h2>
@@ -212,16 +172,13 @@ main {
       </ul>
     </div>
   </div>
-
   <div id="problems" class="module">
     <div class="card">
       <h2>刷题记录</h2>
       <p>客官想看哪篇题解？</p>
     </div>
   </div>
-
   <div id="log" class="module"></div>
-
   <div id="about" class="module">
     <div class="card">
       <h2>关于我</h2>
@@ -229,14 +186,12 @@ main {
     </div>
   </div>
 </main>
-
 <script>
   function showModule(id, btn) {
     document.querySelectorAll('.module').forEach(m =>
       m.classList.remove('active')
     );
     document.getElementById(id).classList.add('active');
-
     document.querySelectorAll('nav button').forEach(b =>
       b.classList.remove('active')
     );
@@ -259,33 +214,59 @@ main {
       </div>
     `;
   }
-
   renderLogs();
 
   const SITE_CREATE_TIME = new Date('2026-01-15 20:00:00');
-  const ARTICLE_COUNT = 18;
-  const LAST_UPDATE = '2026-01-17';
 
   function updateRuntime() {
     const now = new Date();
     let diff = Math.floor((now - SITE_CREATE_TIME) / 1000);
-
     const d = Math.floor(diff / 86400);
     diff %= 86400;
     const h = Math.floor(diff / 3600);
     diff %= 3600;
     const m = Math.floor(diff / 60);
     const s = diff % 60;
-
     document.getElementById('site-runtime').innerText =
       `${d} 天 ${h} 小时 ${m} 分 ${s} 秒`;
   }
 
-  document.getElementById('article-count').innerText = ARTICLE_COUNT;
-  document.getElementById('last-update').innerText = LAST_UPDATE;
+  // ── 自动更新题解数量 & 最后更新 ────────────────────────────────
+  (async function updateArticleStats() {
+    try {
+      // 1. 获取 note/ 目录文件数量
+      const contentsRes = await fetch(
+        "https://api.github.com/repos/07-Kyler/07-Kyler.github.io/contents/note"
+      );
+      if (!contentsRes.ok) throw new Error("contents api failed");
+      const items = await contentsRes.json();
+      const count = items.filter(item => item.type === "file").length;
+
+      // 2. 获取 note/ 最近一次 commit 时间
+      const commitRes = await fetch(
+        "https://api.github.com/repos/07-Kyler/07-Kyler.github.io/commits?path=note&per_page=1"
+      );
+      if (!commitRes.ok) throw new Error("commit api failed");
+      const [latestCommit] = await commitRes.json();
+      let updateText = "—";
+      if (latestCommit) {
+        const d = new Date(latestCommit.commit.author.date);
+        updateText = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+      }
+
+      // 更新 DOM
+      document.getElementById("article-count").innerText = count;
+      document.getElementById("last-update").innerText = updateText;
+
+    } catch (err) {
+      console.error("无法获取仓库统计", err);
+      document.getElementById("article-count").innerText = "—";
+      document.getElementById("last-update").innerText = "获取失败";
+    }
+  })();
+
   updateRuntime();
   setInterval(updateRuntime, 1000);
 </script>
-
 </body>
 </html>
