@@ -6,16 +6,7 @@
 
   <!-- KaTeX JS + auto-render -->
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
-      onload="renderMathInElement(document.body, {
-        delimiters: [
-          {left: '$$', right: '$$', display: true},
-          {left: '$', right: '$', display: false},
-          {left: '\\(', right: '\\)', display: false},
-          {left: '\\[', right: '\\]', display: true}
-        ],
-        throwOnError : false
-      });"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 
   <!-- highlight.js 核心 + 暗主题（github-dark） -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
@@ -44,7 +35,6 @@
       background-attachment: fixed;
     }
 
-    /* 默认浅色模式 + 文字强制黑色 */
     body.dark-mode {
       background-image: url("../assets/images/backgrounddark.jpg");
       color: #e0e0e0 !important;
@@ -54,7 +44,6 @@
       color: #111111 !important;
     }
 
-    /* 强制所有文字颜色（覆盖动态内容） */
     body:not(.dark-mode) *,
     body:not(.dark-mode) *::before,
     body:not(.dark-mode) *::after {
@@ -67,7 +56,6 @@
       color: #e0e0e0 !important;
     }
 
-    /* 毛玻璃遮罩 */
     .bg-mask {
       min-height: 100vh;
       background: rgba(0, 0, 0, 0.15);
@@ -77,7 +65,6 @@
       background: rgba(30, 30, 30, 0.45);
     }
 
-    /* 主布局 */
     .layout {
       display: flex;
       gap: 32px;
@@ -85,7 +72,6 @@
       align-items: flex-start;
     }
 
-    /* 左侧导航栏 */
     .sidebar {
       width: 260px;
       flex-shrink: 0;
@@ -137,13 +123,11 @@
       border-color: rgba(255,255,255,0.35);
     }
 
-    /* 右侧内容区 */
     .content {
       flex: 1;
       display: flex;
     }
 
-    /* 正文卡片 */
     article {
       width: 100%;
       max-width: 980px;
@@ -190,7 +174,6 @@
       background: rgba(255,255,255,0.15);
     }
 
-    /* 代码块优化（适配深浅模式） */
     pre {
       background: rgba(30,30,30,0.7);
       padding: 20px 24px;
@@ -207,7 +190,6 @@
       background: transparent !important;
     }
 
-    /* 响应式 */
     @media (max-width: 900px) {
       .layout {
         flex-direction: column;
@@ -220,7 +202,6 @@
       }
     }
 
-    /* 右上角主题切换按钮 */
     .theme-toggle {
       position: fixed;
       top: 20px;
@@ -255,7 +236,6 @@
 </head>
 <body> <!-- 默认浅色模式，不加 class -->
 
-  <!-- 右上角主题切换按钮 -->
   <div class="theme-toggle" onclick="toggleTheme()" title="切换深色/浅色模式">
     🌙
   </div>
@@ -266,8 +246,7 @@
         <h2>📘 题解目录</h2>
         <ul id="menu"></ul>
         <hr />
-        <!-- 修改：点击返回首页时直接跳到 home.html，而不是根目录 -->
-        <a href="../home.html">← 返回首页</a>
+        <a href="/home.html">← 返回首页</a>
       </aside>
 
       <main class="content" id="content">
@@ -295,15 +274,16 @@
         });
       });
 
-    // 加载单篇题解 + 渲染数学公式 + 高亮代码
+    // 加载单篇题解 + 完整渲染部分
     function loadNote(filename) {
       fetch(filename)
         .then(res => res.text())
         .then(md => {
+          // 先解析 Markdown
           const html = marked.parse(md);
           document.getElementById("content").innerHTML = `<article>${html}</article>`;
 
-          // 立即渲染 KaTeX 数学公式
+          // 步骤1: 立即渲染 KaTeX 数学公式
           if (typeof renderMathInElement === 'function') {
             renderMathInElement(document.getElementById("content"), {
               delimiters: [
@@ -317,14 +297,14 @@
             });
           }
 
-          // 高亮所有代码块
+          // 步骤2: 高亮所有代码块
           if (typeof hljs !== 'undefined') {
             document.querySelectorAll('pre code').forEach((block) => {
               hljs.highlightElement(block);
             });
           }
 
-          // 动态内容加载后强制颜色覆盖
+          // 步骤3: 强制覆盖动态内容的文字颜色（确保深浅模式一致）
           const isDark = document.body.classList.contains("dark-mode");
           const articles = document.querySelectorAll('article *');
           articles.forEach(el => {
@@ -337,7 +317,7 @@
         });
     }
 
-    // 页面加载后自动高亮
+    // 页面初次加载时自动高亮（如果有静态内容）
     document.addEventListener('DOMContentLoaded', () => {
       if (typeof hljs !== 'undefined') {
         hljs.highlightAll();
