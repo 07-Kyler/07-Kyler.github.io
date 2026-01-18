@@ -10,11 +10,9 @@
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
         crossorigin="anonymous">
-
   <script defer
           src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
           crossorigin="anonymous"></script>
-
   <script defer
           src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
           crossorigin="anonymous"></script>
@@ -24,7 +22,6 @@
   ====================== -->
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
 
@@ -34,6 +31,9 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <style>
+    /* ======================
+       基础布局
+    ====================== */
     html, body {
       margin: 0;
       padding: 0;
@@ -55,12 +55,10 @@
       color: #e0e0e0;
     }
 
-    /* 毛玻璃遮罩 */
     .bg-mask {
       min-height: 100vh;
       background: rgba(0,0,0,0.15);
     }
-
     body.dark-mode .bg-mask {
       background: rgba(30,30,30,0.45);
     }
@@ -146,42 +144,71 @@
       border-color: rgba(255,255,255,0.15);
     }
 
-    article p,
-    article li {
-      line-height: 1.7;
-    }
-
-    /* Markdown 分割线修复 */
     article hr {
       border: none;
       height: 1px;
       margin: 2em 0;
-      background: rgba(255,255,255,0.25);
-    }
-
-    body:not(.dark-mode) article hr {
       background: rgba(0,0,0,0.25);
+    }
+    body.dark-mode article hr {
+      background: rgba(255,255,255,0.15);
     }
 
     /* ======================
        Code block
     ====================== */
     pre {
-      background: rgba(30,30,30,0.7);
       padding: 20px 24px;
       border-radius: 16px;
-      border: 1px solid rgba(100,100,100,0.3);
       overflow-x: auto;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
       margin: 1.5em 0;
+      border: 1px solid rgba(100,100,100,0.25);
+    }
+
+    body.dark-mode pre {
+      background: rgba(30,30,30,0.75);
     }
 
     body:not(.dark-mode) pre {
-      background: rgba(0,0,0,0.25);
+      background: rgba(245,246,248,0.95);
     }
 
     pre code.hljs {
       background: transparent !important;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ======================
+       ✅ 浅色模式下强化高亮对比度
+    ====================== */
+    body:not(.dark-mode) .hljs {
+      color: #1f2328;
+    }
+
+    body:not(.dark-mode) .hljs-keyword,
+    body:not(.dark-mode) .hljs-type,
+    body:not(.dark-mode) .hljs-built_in {
+      color: #005cc5;
+      font-weight: 600;
+    }
+
+    body:not(.dark-mode) .hljs-string {
+      color: #22863a;
+    }
+
+    body:not(.dark-mode) .hljs-number {
+      color: #b31d28;
+    }
+
+    body:not(.dark-mode) .hljs-comment {
+      color: #6a737d;
+      font-style: italic;
+    }
+
+    body:not(.dark-mode) .hljs-function,
+    body:not(.dark-mode) .hljs-title {
+      color: #6f42c1;
     }
 
     /* ======================
@@ -209,18 +236,6 @@
       background: rgba(0,0,0,0.3);
       color: #e0e0e0;
     }
-
-    @media (max-width: 900px) {
-      .layout {
-        flex-direction: column;
-      }
-      .sidebar {
-        width: 100%;
-      }
-      article {
-        max-width: 100%;
-      }
-    }
   </style>
 </head>
 
@@ -239,74 +254,53 @@
     <main class="content" id="content">
       <article>
         <h2>请选择题解</h2>
-        <p>(^_^)</p>
       </article>
     </main>
   </div>
 </div>
 
 <script>
-  /* ======================
-     marked 配置（关键）
-  ====================== */
-  marked.setOptions({
-    langPrefix: 'language-'
-  });
+  marked.setOptions({ langPrefix: 'language-' });
 
-  /* ======================
-     加载目录
-  ====================== */
   fetch("notes.json")
-    .then(res => res.json())
+    .then(r => r.json())
     .then(list => {
       const menu = document.getElementById("menu");
-      list.forEach(item => {
-        const li = document.createElement("li");
+      list.forEach(i => {
         const a = document.createElement("a");
-        a.textContent = item.title;
-        a.onclick = () => loadNote(item.file);
+        a.textContent = i.title;
+        a.onclick = () => loadNote(i.file);
+        const li = document.createElement("li");
         li.appendChild(a);
         menu.appendChild(li);
       });
     });
 
-  /* ======================
-     加载题解
-  ====================== */
   function loadNote(file) {
-    fetch(file)
-      .then(res => res.text())
-      .then(md => {
-        const html = marked.parse(md);
-        const content = document.getElementById("content");
-        content.innerHTML = `<article>${html}</article>`;
+    fetch(file).then(r => r.text()).then(md => {
+      const html = marked.parse(md);
+      const content = document.getElementById("content");
+      content.innerHTML = `<article>${html}</article>`;
 
-        // 代码高亮
-        content.querySelectorAll("pre code").forEach(block => {
-          hljs.highlightElement(block);
-        });
-
-        // KaTeX
-        renderMathInElement(content, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "$", right: "$", display: false },
-            { left: "\\(", right: "\\)", display: false },
-            { left: "\\[", right: "\\]", display: true }
-          ],
-          throwOnError: false
-        });
+      content.querySelectorAll("pre code").forEach(b => {
+        hljs.highlightElement(b);
       });
+
+      renderMathInElement(content, {
+        delimiters: [
+          {left:"$$", right:"$$", display:true},
+          {left:"$", right:"$", display:false}
+        ],
+        throwOnError:false
+      });
+    });
   }
 
-  /* ======================
-     主题切换
-  ====================== */
   function toggleTheme() {
     document.body.classList.toggle("dark-mode");
-    const isDark = document.body.classList.contains("dark-mode");
-    document.querySelector(".theme-toggle").textContent = isDark ? "☀️" : "🌙";
-    localStorage.setItem("theme", isDark ? "dark" : "light");
+    const d = document.body.classList.contains("dark-mode");
+    document.querySelector(".theme-toggle").textContent = d ? "☀️" : "🌙";
+    localStorage.setItem("theme", d ? "dark" : "light");
   }
 
   window.addEventListener("load", () => {
