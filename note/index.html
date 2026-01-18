@@ -17,7 +17,7 @@
         throwOnError : false
       });"></script>
 
-  <!-- highlight.js 核心 + 暗主题（github-dark） -->
+  <!-- highlight.js 核心 + 暗主题（github-dark 高级暗黑风格） -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
 
   <!-- highlight.js 主文件 + C++ 支持 -->
@@ -294,7 +294,7 @@
         });
       });
 
-    // 加载单篇题解 + 渲染数学公式 + 高亮代码
+    // 加载单篇题解 + 渲染数学公式 + 高亮代码（完整恢复渲染部分）
     function loadNote(filename) {
       fetch(filename)
         .then(res => res.text())
@@ -302,7 +302,7 @@
           const html = marked.parse(md);
           document.getElementById("content").innerHTML = `<article>${html}</article>`;
 
-          // 渲染 KaTeX
+          // 立即渲染 KaTeX 数学公式
           if (typeof renderMathInElement === 'function') {
             renderMathInElement(document.getElementById("content"), {
               delimiters: [
@@ -316,24 +316,19 @@
             });
           }
 
-          // 高亮代码
+          // 高亮所有代码块
           if (typeof hljs !== 'undefined') {
             document.querySelectorAll('pre code').forEach((block) => {
               hljs.highlightElement(block);
             });
           }
 
-          // 动态内容加载后，再强制执行一次颜色覆盖（针对深色模式）
+          // 动态内容加载后，再强制执行一次颜色覆盖（确保深浅模式文字正确）
           const isDark = document.body.classList.contains("dark-mode");
-          if (isDark) {
-            document.querySelectorAll('article *').forEach(el => {
-              el.style.color = '#e0e0e0';
-            });
-          } else {
-            document.querySelectorAll('article *').forEach(el => {
-              el.style.color = '#111111';
-            });
-          }
+          const articles = document.querySelectorAll('article *');
+          articles.forEach(el => {
+            el.style.color = isDark ? '#e0e0e0' : '#111111';
+          });
         })
         .catch(err => {
           console.error("加载题解失败", err);
