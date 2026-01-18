@@ -5,7 +5,7 @@
   <title>MY PERSONAL WEEEEEEEB!</title>
   <style>
     /* =========================
-       全局 & 背景（统一路径，防抖）
+       全局 & 背景（支持深浅模式切换）
     ========================= */
     * {
       box-sizing: border-box;
@@ -45,13 +45,8 @@
       color: #111111 !important;
     }
 
-    /* 切换时禁用过渡动画（防抖动） */
-    body.theme-switching {
-      transition: none !important;
-    }
-
     /* =========================
-       顶部标题
+       顶部标题（固定 + 毛玻璃优化）
     ========================= */
     header {
       position: sticky;
@@ -62,9 +57,12 @@
       font-weight: 600;
       backdrop-filter: blur(16px) saturate(140%);
       -webkit-backdrop-filter: blur(16px) saturate(140%);
-      background: rgba(255,255,255,0.18);
       border-bottom: 1px solid rgba(255,255,255,0.25);
       transition: all 0.4s ease;
+    }
+    body:not(.dark-mode) header {
+      background: rgba(255,255,255,0.45); /* 浅色模式下透明度更高，毛玻璃更明显 */
+      border-bottom: 1px solid rgba(0,0,0,0.15);
     }
     body.dark-mode header {
       background: rgba(30,30,30,0.65);
@@ -73,7 +71,7 @@
     }
 
     /* =========================
-       导航栏
+       导航栏（固定 + 毛玻璃优化）
     ========================= */
     nav {
       position: sticky;
@@ -84,8 +82,10 @@
       padding: 14px 40px;
       backdrop-filter: blur(16px) saturate(140%);
       -webkit-backdrop-filter: blur(16px) saturate(140%);
-      background: rgba(255,255,255,0.15);
       transition: all 0.4s ease;
+    }
+    body:not(.dark-mode) nav {
+      background: rgba(255,255,255,0.35); /* 浅色模式下增加透明度，毛玻璃更明显 */
     }
     body.dark-mode nav {
       background: rgba(30,30,30,0.65);
@@ -110,17 +110,17 @@
     }
 
     /* =========================
-       主体区域（统一 padding 与 note 一致）
+       主体区域（统一 padding）
     ========================= */
     main {
       position: relative;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 120px 40px 60px; /* 与 note 统一，防错位 */
+      padding: 120px 40px 60px;
     }
 
     /* =========================
-       阅读卡片
+       阅读卡片（毛玻璃优化）
     ========================= */
     .card {
       max-width: 720px;
@@ -130,13 +130,19 @@
       padding: 36px 40px;
       backdrop-filter: blur(26px) saturate(160%);
       -webkit-backdrop-filter: blur(26px) saturate(160%);
-      background: rgba(255,255,255,0.18);
       border-radius: 22px;
       border: 1px solid rgba(255,255,255,0.3);
       box-shadow:
         0 12px 40px rgba(0,0,0,0.25),
         inset 0 1px 1px rgba(255,255,255,0.5);
       transition: all 0.4s ease;
+    }
+    body:not(.dark-mode) .card {
+      background: rgba(255,255,255,0.45); /* 浅色模式下透明度更高，毛玻璃更明显 */
+      border: 1px solid rgba(0,0,0,0.15);
+      box-shadow:
+        0 12px 40px rgba(0,0,0,0.2),
+        inset 0 1px 1px rgba(0,0,0,0.1);
     }
     body.dark-mode .card {
       background: rgba(30,30,30,0.65);
@@ -147,17 +153,16 @@
     }
 
     /* =========================
-       右侧网站数据卡片
+       右侧网站数据卡片（毛玻璃优化）
     ========================= */
     #site-stats {
       position: absolute;
-      top: 260px; /* 微调位置，确保不被 nav 挡 */
+      top: 260px;
       right: 40px;
       width: 250px;
       padding: 22px 20px;
       backdrop-filter: blur(28px) saturate(170%);
       -webkit-backdrop-filter: blur(28px) saturate(170%);
-      background: rgba(255,255,255,0.16);
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.3);
       box-shadow:
@@ -165,6 +170,13 @@
         inset 0 1px 1px rgba(255,255,255,0.5);
       transition: all 0.4s ease;
       z-index: 900;
+    }
+    body:not(.dark-mode) #site-stats {
+      background: rgba(255,255,255,0.45); /* 浅色模式下透明度更高，毛玻璃更明显 */
+      border: 1px solid rgba(0,0,0,0.15);
+      box-shadow:
+        0 14px 40px rgba(0,0,0,0.25),
+        inset 0 1px 1px rgba(0,0,0,0.1);
     }
     body.dark-mode #site-stats {
       background: rgba(30,30,30,0.65);
@@ -380,7 +392,7 @@
     updateRuntime();
     setInterval(updateRuntime, 1000);
 
-    // 主题切换（添加 class 临时禁用过渡）
+    // 主题切换（添加临时 class 防抖动）
     function toggleTheme() {
       document.body.classList.add("theme-switching");
       document.body.classList.toggle("dark-mode");
@@ -391,7 +403,6 @@
 
       localStorage.setItem("theme", isDark ? "dark" : "light");
 
-      // 切换完 300ms 后移除禁用过渡 class
       setTimeout(() => {
         document.body.classList.remove("theme-switching");
       }, 300);
