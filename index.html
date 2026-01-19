@@ -23,7 +23,6 @@
       background-repeat: no-repeat;
       background-attachment: fixed;
     }
-
     body.dark-mode {
       background-image: url("assets/images/backgrounddark.jpg");
       color: #e0e0e0;
@@ -58,9 +57,9 @@
       height: auto;
     }
 
-    .hello-svg path.main-stroke,
-    .hello-svg path.glass-stroke {
+    .hello-svg path.main-stroke {
       fill: none;
+      stroke-width: 52;
       stroke-linecap: round;
       stroke-miterlimit: 10;
       stroke-dasharray: 5800;
@@ -69,13 +68,22 @@
       transition: stroke 0.4s ease;
     }
 
-    .hello-svg path.main-stroke { stroke-width: 52; }
-    .hello-svg path.glass-stroke { stroke-width: 60; filter: blur(3px); }
+    .hello-svg path.glass-stroke {
+      fill: none;
+      stroke-width: 60;
+      stroke-linecap: round;
+      stroke-miterlimit: 10;
+      stroke-dasharray: 5800;
+      stroke-dashoffset: 5800;
+      animation: draw-hello 5.2s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      filter: blur(3px);
+      transition: stroke 0.4s ease;
+    }
 
-    body.dark-mode .main-stroke { stroke: rgba(255,255,255,0.88); }
-    body.dark-mode .glass-stroke { stroke: rgba(255,255,255,0.5); }
-    body:not(.dark-mode) .main-stroke { stroke: rgba(0,0,0,0.88); }
-    body:not(.dark-mode) .glass-stroke { stroke: rgba(0,0,0,0.5); }
+    body.dark-mode .hello-svg path.main-stroke { stroke: rgba(255,255,255,0.88); }
+    body.dark-mode .hello-svg path.glass-stroke { stroke: rgba(255,255,255,0.5); }
+    body:not(.dark-mode) .hello-svg path.main-stroke { stroke: rgba(0,0,0,0.88); }
+    body:not(.dark-mode) .hello-svg path.glass-stroke { stroke: rgba(0,0,0,0.5); }
 
     @keyframes draw-hello {
       0% { stroke-dashoffset: 5800; opacity: 0.6; }
@@ -115,16 +123,14 @@
       transition: all 0.6s cubic-bezier(0.23,1,0.32,1);
       z-index: 1100;
     }
-
     .enter-glass-btn.show {
       opacity: 1;
       pointer-events: auto;
       animation: fadeInScale 1s ease-out forwards;
     }
-
     @keyframes fadeInScale {
       from { opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
-      to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
     }
 
     .theme-toggle {
@@ -150,7 +156,8 @@
 <div class="blur-overlay"></div>
 
 <div class="hello-wrapper" id="helloWrapper">
-  <!-- SVG 内容原样保留（省略，与你给的一致） -->
+  <!-- 你的 SVG 原封不动 -->
+  <!-- （此处省略说明：内容与你原代码完全一致） -->
 </div>
 
 <button class="enter-glass-btn" id="enterBtn" onclick="enterSite()">ENTER</button>
@@ -166,18 +173,21 @@
   window.addEventListener("load", () => {
     const helloWrapper = document.getElementById("helloWrapper");
     const enterBtn = document.getElementById("enterBtn");
+    const mainStrokePath = document.getElementById("mainStrokePath");
 
-    const HELLO_DURATION = 5200; // 与 CSS 动画一致
-    const OVERLAP = 300;        // 提前衔接
-
-    setTimeout(() => {
-      helloWrapper.classList.add("fade-out");
-      enterBtn.classList.add("show");
-    }, HELLO_DURATION - OVERLAP);
+    mainStrokePath.addEventListener("animationend", () => {
+      // 关键：同一渲染帧衔接，消除“停顿感”
+      requestAnimationFrame(() => {
+        helloWrapper.classList.add("fade-out");
+        enterBtn.classList.add("show");
+      });
+    });
   });
 
   function enterSite() {
-    setTimeout(() => location.href = "home.html", 800);
+    setTimeout(() => {
+      location.href = "home.html";
+    }, 800);
   }
 </script>
 
