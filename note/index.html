@@ -32,7 +32,7 @@
       background-image: url("../assets/images/backgroundlight.jpg");
     }
 
-    body:not(.dark-mode) { color: #111111; }
+    body:not(.dark-mode) { color: #111; }
     body.dark-mode { color: #e0e0e0; }
 
     .bg-mask {
@@ -50,53 +50,46 @@
       align-items: flex-start;
     }
 
-    /* ===== 返回首页：独立固定 ===== */
+    /* ===== 返回首页 ===== */
     .back-home {
       position: fixed;
       left: 40px;
       top: 20px;
-      padding: 12px 16px;
+      padding: 10px 14px;
       backdrop-filter: blur(18px);
-      border-radius: 16px;
+      border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.30);
       background: rgba(255,255,255,0.18);
       text-decoration: none;
       font-weight: 500;
       z-index: 1100;
-      transition: all 0.25s ease;
-
-      /* ★新增：浅色模式文字颜色（覆盖默认蓝/紫色） */
       color: #1f2328;
+      transition: all 0.25s ease;
     }
 
     body.dark-mode .back-home {
       background: rgba(30,30,30,0.65);
-
-      /* ★新增：深色模式文字颜色 */
       color: #f1f5f9;
     }
 
     .back-home:hover {
-      transform: translateX(10px);
+      transform: translateX(8px);
       background: rgba(255,255,255,0.25);
     }
 
-    body.dark-mode .back-home:hover {
-      background: rgba(255,255,255,0.18);
-    }
-
-    /* ===== 侧边栏 ===== */
+    /* ===== 侧边栏整体（不滚动） ===== */
     .sidebar {
       position: fixed;
       left: 40px;
       top: 80px;
       width: 260px;
       max-height: calc(100vh - 160px);
-      padding: 20px 14px;
+      padding: 16px 14px 14px;
       backdrop-filter: blur(18px);
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.30);
-      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
     }
 
     body:not(.dark-mode) .sidebar {
@@ -106,18 +99,35 @@
       background: rgba(30,30,30,0.65);
     }
 
-    .sidebar::-webkit-scrollbar {
+    /* ===== 固定标题 ===== */
+    .sidebar h2 {
+      margin: 0 0 12px;
+      padding: 6px 8px;
+      font-size: 18px;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      backdrop-filter: blur(10px);
+    }
+
+    /* ===== 只让目录滚动 ===== */
+    .sidebar-scroll {
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .sidebar-scroll::-webkit-scrollbar {
       width: 8px;
     }
-    .sidebar::-webkit-scrollbar-track {
+    .sidebar-scroll::-webkit-scrollbar-track {
       background: transparent;
     }
-    .sidebar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.25);
+    .sidebar-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.25);
       border-radius: 6px;
     }
-    body.dark-mode .sidebar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.18);
+    body.dark-mode .sidebar-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.18);
     }
 
     .sidebar ul {
@@ -125,6 +135,7 @@
       padding: 0;
       margin: 0;
     }
+
     .sidebar li {
       margin-bottom: 12px;
     }
@@ -145,6 +156,7 @@
       background: rgba(255,255,255,0.22);
       box-shadow: 0 8px 24px rgba(0,0,0,0.18);
     }
+
     body.dark-mode .sidebar a:hover {
       background: rgba(255,255,255,0.18);
     }
@@ -174,10 +186,7 @@
       border: none;
       height: 1px;
       margin: 24px 0;
-      background: rgba(255, 255, 255, 0.35);
-    }
-    body:not(.dark-mode) article hr {
-      background: rgba(0, 0, 0, 0.25);
+      background: rgba(0,0,0,0.25);
     }
 
     pre {
@@ -192,11 +201,6 @@
     body:not(.dark-mode) pre {
       background: rgba(255,255,255,0.55);
       border: 1px solid rgba(0,0,0,0.15);
-    }
-
-    body:not(.dark-mode) pre code {
-      color: #1f2328;
-      font-weight: 500;
     }
 
     pre code.hljs {
@@ -223,7 +227,6 @@
 
     body.dark-mode .theme-toggle {
       background: rgba(0,0,0,0.3);
-      border-color: rgba(255,255,255,0.2);
       color: #e0e0e0;
     }
   </style>
@@ -231,15 +234,16 @@
 
 <body>
 <div class="theme-toggle" onclick="toggleTheme()">🌙</div>
-
-<a href="/home.html" class="back-home">← 返回首页</a>
+<a href="/home.html" class="back-home">← RETURN HOME😄</a>
 
 <div class="bg-mask">
   <div class="layout">
 
     <aside class="sidebar">
       <h2>📘 题解目录</h2>
-      <ul id="menu"></ul>
+      <div class="sidebar-scroll">
+        <ul id="menu"></ul>
+      </div>
     </aside>
 
     <main class="content" id="content">
