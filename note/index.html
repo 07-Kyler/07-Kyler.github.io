@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
@@ -17,11 +17,7 @@
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
       background-attachment: fixed;
     }
 
@@ -32,34 +28,30 @@
       background-image: url("../assets/images/backgroundlight.jpg");
     }
 
-    body:not(.dark-mode) { color: #111111; }
-    body.dark-mode { color: #e0e0e0; }
-
     .bg-mask {
       min-height: 100vh;
-      background: rgba(0, 0, 0, 0.15);
-    }
-    body.dark-mode .bg-mask {
-      background: rgba(30, 30, 30, 0.45);
+      background: rgba(0,0,0,0.15);
     }
 
-    /* ⭐ 主体布局：给左侧固定导航让位 */
     .layout {
-      display: flex;
-      gap: 32px;
       padding: 120px 40px 60px;
       padding-left: 340px;
-      align-items: flex-start;
     }
 
-    /* ⭐ 彻底固定的左侧导航栏 */
+    /* ⭐ 完整修复后的 sidebar */
     .sidebar {
       position: fixed;
       left: 40px;
-      top: 45%;
+      top: 50%;
       transform: translateY(-50%);
+
       width: 260px;
+      max-height: calc(100vh - 160px);
       padding: 20px 14px;
+
+      overflow-y: auto;
+      overflow-x: hidden;
+
       backdrop-filter: blur(18px);
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.30);
@@ -73,31 +65,39 @@
       background: rgba(30,30,30,0.65);
     }
 
+    /* 滚动条细化（不破坏玻璃风格） */
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.35);
+      border-radius: 6px;
+    }
+    .sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
     .sidebar ul {
       list-style: none;
       padding: 0;
       margin: 0;
     }
-    .sidebar li {
-      margin-bottom: 12px;
-    }
+
     .sidebar a {
       display: block;
       padding: 12px 16px;
-      background: rgba(255,255,255,0.14);
+      margin-bottom: 10px;
       border-radius: 12px 24px 24px 12px;
+      background: rgba(255,255,255,0.14);
       border: 1px solid rgba(255,255,255,0.25);
       text-decoration: none;
-      cursor: pointer;
       transition: all 0.25s ease;
     }
 
     .sidebar a:hover {
       transform: translateX(6px);
-      background: rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.28);
     }
-
-    .content { flex: 1; }
 
     article {
       max-width: 980px;
@@ -113,65 +113,21 @@
     body.dark-mode article {
       background: rgba(30,30,30,0.65);
     }
-
-    pre {
-      background: rgba(30,30,30,0.7);
-      padding: 20px 24px;
-      border-radius: 16px;
-      border: 1px solid rgba(100,100,100,0.3);
-      overflow-x: auto;
-      margin: 1.5em 0;
-    }
-    body:not(.dark-mode) pre {
-      background: rgba(0,0,0,0.25);
-    }
-
-    pre code.hljs {
-      background: transparent !important;
-    }
-
-    body:not(.dark-mode) .hljs { color: #e6e6e6; }
-
-    .theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 30px;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.25);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.35);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      z-index: 1200;
-    }
-
-    body.dark-mode .theme-toggle {
-      background: rgba(0,0,0,0.3);
-      border-color: rgba(255,255,255,0.2);
-      color: #e0e0e0;
-    }
   </style>
 </head>
 
 <body>
 
-<div class="theme-toggle" onclick="toggleTheme()">🌙</div>
-
 <div class="bg-mask">
   <aside class="sidebar">
     <h2>📘 题解目录</h2>
     <ul id="menu"></ul>
-    <hr />
+    <hr>
     <a href="/home.html">← 返回首页</a>
   </aside>
 
   <div class="layout">
-    <main class="content" id="content">
+    <main id="content">
       <article>
         <h2>客官想看哪篇题解</h2>
         <p>(^_^)</p>
@@ -195,40 +151,16 @@ fetch("notes.json")
     });
   });
 
-function loadNote(filename) {
-  fetch(filename)
+function loadNote(file) {
+  fetch(file)
     .then(res => res.text())
     .then(md => {
-      const content = document.getElementById("content");
-      content.innerHTML = `<article>${marked.parse(md)}</article>`;
-
-      renderMathInElement(content, {
-        delimiters: [
-          {left: '$$', right: '$$', display: true},
-          {left: '$', right: '$', display: false}
-        ],
-        throwOnError: false
-      });
-
-      content.querySelectorAll('pre code').forEach(block => {
-        hljs.highlightElement(block);
-      });
+      document.getElementById("content").innerHTML =
+        `<article>${marked.parse(md)}</article>`;
+      renderMathInElement(document.body);
+      document.querySelectorAll("pre code").forEach(hljs.highlightElement);
     });
 }
-
-function toggleTheme() {
-  document.body.classList.toggle("dark-mode");
-  const isDark = document.body.classList.contains("dark-mode");
-  document.querySelector(".theme-toggle").textContent = isDark ? "☀️" : "🌙";
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-}
-
-window.addEventListener("load", () => {
-  if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark-mode");
-    document.querySelector(".theme-toggle").textContent = "☀️";
-  }
-});
 </script>
 
 </body>
