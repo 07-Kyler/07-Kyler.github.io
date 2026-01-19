@@ -43,7 +43,6 @@
       background: rgba(30, 30, 30, 0.45);
     }
 
-    /* ★修改：去掉顶部 padding，避免背景被整体拉下 */
     .layout {
       display: flex;
       gap: 32px;
@@ -51,7 +50,6 @@
       align-items: flex-start;
     }
 
-    /* ===== 固定侧栏 ===== */
     .sidebar {
       position: fixed;
       left: 40px;
@@ -70,6 +68,21 @@
     }
     body.dark-mode .sidebar {
       background: rgba(30,30,30,0.65);
+    }
+
+    /* ★新增：侧边栏滚动条毛玻璃风格 */
+    .sidebar::-webkit-scrollbar {
+      width: 8px;
+    }
+    .sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 6px;
+    }
+    body.dark-mode .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.18);
     }
 
     .sidebar ul {
@@ -91,7 +104,6 @@
       transition: all 0.25s ease;
     }
 
-    /* ★新增：主内容自己下移，不影响背景 */
     .content {
       flex: 1;
       margin-left: 320px;
@@ -111,6 +123,17 @@
     }
     body.dark-mode article {
       background: rgba(30,30,30,0.65);
+    }
+
+    /* ★新增：Markdown 横线样式修复 */
+    article hr {
+      border: none;
+      height: 1px;
+      margin: 24px 0;
+      background: rgba(255, 255, 255, 0.35);
+    }
+    body:not(.dark-mode) article hr {
+      background: rgba(0, 0, 0, 0.25);
     }
 
     pre {
@@ -156,7 +179,6 @@
 </head>
 
 <body>
-
 <div class="theme-toggle" onclick="toggleTheme()">🌙</div>
 
 <div class="bg-mask">
@@ -229,6 +251,5 @@ window.addEventListener("load", () => {
   }
 });
 </script>
-
 </body>
 </html>
