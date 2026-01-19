@@ -50,12 +50,18 @@
       align-items: flex-start;
     }
 
+    /* =========================
+       ★修改：sidebar 变为独立滚动
+    ========================= */
     .sidebar {
       width: 260px;
       padding: 20px 14px;
       backdrop-filter: blur(18px);
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.30);
+
+      max-height: calc(100vh - 180px);
+      overflow-y: auto;
     }
 
     body:not(.dark-mode) .sidebar {
@@ -63,6 +69,30 @@
     }
     body.dark-mode .sidebar {
       background: rgba(30,30,30,0.65);
+    }
+
+    /* ★新增：sidebar 顶部区域 */
+    .sidebar-top {
+      margin-bottom: 16px;
+    }
+
+    .sidebar-top a {
+      display: block;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.3);
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .sidebar-top a:hover {
+      transform: translateX(6px);
+      background: rgba(255,255,255,0.28);
+    }
+
+    .sidebar h2 {
+      margin-top: 0;
     }
 
     .sidebar ul {
@@ -82,6 +112,10 @@
       text-decoration: none;
       cursor: pointer;
       transition: all 0.25s ease;
+    }
+
+    .sidebar a:hover {
+      transform: translateX(8px);
     }
 
     .content { flex: 1; }
@@ -117,7 +151,6 @@
       background: transparent !important;
     }
 
-    /* 浅色模式下高亮增强（你已有，保持不动） */
     body:not(.dark-mode) .hljs { color: #e6e6e6; }
     body:not(.dark-mode) .hljs-keyword,
     body:not(.dark-mode) .hljs-selector-tag,
@@ -139,7 +172,6 @@
       font-style: italic;
     }
 
-    /* ★新增：主题切换按钮样式 */
     .theme-toggle {
       position: fixed;
       top: 20px;
@@ -168,16 +200,20 @@
 
 <body>
 
-<!-- ★新增：模式切换按钮 -->
 <div class="theme-toggle" onclick="toggleTheme()" title="切换深色/浅色模式">🌙</div>
 
 <div class="bg-mask">
   <div class="layout">
     <aside class="sidebar">
+
+      <!-- ★新增：返回首页放到最上方 -->
+      <div class="sidebar-top">
+        <a href="/home.html">← 返回首页</a>
+      </div>
+
       <h2>📘 题解目录</h2>
       <ul id="menu"></ul>
-      <hr />
-      <a href="/home.html">← 返回首页</a>
+
     </aside>
 
     <main class="content" id="content">
@@ -240,7 +276,6 @@ function updateContentColors() {
   });
 }
 
-/* ★新增：主题切换逻辑（最小版本） */
 function toggleTheme() {
   document.body.classList.toggle("dark-mode");
   const isDark = document.body.classList.contains("dark-mode");
@@ -249,7 +284,6 @@ function toggleTheme() {
   updateContentColors();
 }
 
-/* ★新增：页面加载时恢复主题 */
 window.addEventListener("load", () => {
   const savedTheme = localStorage.getItem("theme");
   if (savedTheme === "dark") {
