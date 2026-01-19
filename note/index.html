@@ -90,8 +90,7 @@
       border: 1px solid rgba(255,255,255,0.30);
       display: flex;
       flex-direction: column;
-
-      overflow: hidden; /* 保留：防止 hover 影响父容器溢出 */
+      overflow: hidden;
     }
 
     body:not(.dark-mode) .sidebar {
@@ -101,7 +100,7 @@
       background: rgba(30,30,30,0.65);
     }
 
-    /* 固定标题 （改为玻璃背景，去掉实色外框） */
+    /* 固定标题（允许换行） */
     .sidebar h2 {
       margin: 0 0 12px;
       padding: 8px 10px;
@@ -111,11 +110,12 @@
       z-index: 2;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-
-      /* 下面两行使标题呈现轻微毛玻璃（最小侵入） */
       background: rgba(255,255,255,0.04);
       border-radius: 10px;
-      /* 在深色模式稍微调整透明度 */
+
+      /* ★ 允许换行，自适应高度 */
+      white-space: normal;
+      word-break: break-word;
     }
     body.dark-mode .sidebar h2 {
       background: rgba(255,255,255,0.03);
@@ -128,11 +128,8 @@
     .sidebar-scroll {
       overflow-y: auto;
       padding-right: 4px;
-
-      flex: 1;        /* 保留：锁死滚动区域高度 */
-      min-height: 0;  /* 保留：防止 scrollHeight 抖动 */
-
-      /* ★ 新增：禁止横向溢出，避免 hover 导致出现底部横条 */
+      flex: 1;
+      min-height: 0;
       overflow-x: hidden;
     }
 
@@ -169,11 +166,9 @@
       text-decoration: none;
       cursor: pointer;
       transition: all 0.20s ease;
-      /* 防止 hover 时文字换行导致宽度跳变 */
       white-space: nowrap;
     }
 
-    /* 缩小向右位移，避免接近容器边缘导致水平溢出（最小侵入） */
     .sidebar a:hover {
       transform: translateX(6px);
       background: rgba(255,255,255,0.22);
@@ -205,12 +200,10 @@
       background: rgba(30,30,30,0.65);
     }
 
-    /* ===== Markdown 横线：细且玻璃感（最小侵入） ===== */
     article hr {
       border: none;
       height: 1px;
       margin: 24px 0;
-      /* 透明渐变，两端柔和，中间可见 */
       background: linear-gradient(to right,
                   rgba(255,255,255,0) 0%,
                   rgba(255,255,255,0.12) 10%,
@@ -218,7 +211,6 @@
                   rgba(255,255,255,0) 100%);
       opacity: 0.55;
     }
-    /* 浅色模式调整为深色细线 */
     body:not(.dark-mode) article hr {
       background: linear-gradient(to right,
                   rgba(0,0,0,0) 0%,
@@ -279,7 +271,7 @@
   <div class="layout">
 
     <aside class="sidebar">
-      <h2>📘 题解目录</h2>
+      <h2>📘 题解目录（标题超长测试换行看看效果）</h2>
       <div class="sidebar-scroll">
         <ul id="menu"></ul>
       </div>
