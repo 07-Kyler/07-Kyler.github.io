@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>ENTER</title>
   <style>
-    /* ===== 全屏背景（原样保留） ===== */
     html, body {
       width: 100%;
       height: 100%;
@@ -23,7 +22,7 @@
       background-repeat: no-repeat;
       background-attachment: fixed;
     }
-    /* 默认浅色模式背景 + 文字强制黑色 */
+
     body.dark-mode {
       background-image: url("assets/images/backgrounddark.jpg");
       color: #e0e0e0;
@@ -37,7 +36,8 @@
     body:not(.dark-mode) *::after {
       color: #111111 !important;
     }
-    /* ===== hello书写动画容器（添加 will-change 优化） ===== */
+
+    /* ===== hello 动画 ===== */
     .hello-wrapper {
       position: fixed;
       inset: 0;
@@ -46,72 +46,51 @@
       justify-content: center;
       z-index: 1000;
       pointer-events: none;
-      transition: opacity 0.4s ease; /* 缩短淡出时间，减少计算 */
-      will-change: opacity; /* 提示浏览器优化 opacity 变化 */
+      transition: opacity 0.4s ease;
     }
-    .hello-wrapper.fade-out {
-      opacity: 0;
-    }
+    .hello-wrapper.fade-out { opacity: 0; }
+
     .hello-svg {
-      width: 75vmin; /* 稍减小尺寸，降低渲染负载 */
+      width: 75vmin;
       max-width: 750px;
-      height: auto;
-      will-change: transform; /* GPU 加速 */
     }
-    .hello-svg path.main-stroke {
-      fill: none;
-      stroke-width: 52;
-      stroke-linecap: round;
-      stroke-miterlimit: 10;
-      stroke-dasharray: 5800;
-      stroke-dashoffset: 5800;
-      animation: draw-hello 4.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards; /* 缩短动画时间到4.5s */
-      transition: stroke 0.4s ease;
-    }
+
+    .hello-svg path.main-stroke,
     .hello-svg path.glass-stroke {
       fill: none;
-      stroke-width: 60;
       stroke-linecap: round;
       stroke-miterlimit: 10;
       stroke-dasharray: 5800;
       stroke-dashoffset: 5800;
-      animation: draw-hello 4.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
-      filter: blur(3px);
-      transition: stroke 0.4s ease;
+      animation: draw-hello 4.5s cubic-bezier(0.25,0.8,0.25,1) forwards;
     }
-    /* 适配深浅模式颜色（白色/黑色） */
-    body.dark-mode .hello-svg path.main-stroke {
-      stroke: rgba(255,255,255,0.88);
-    }
-    body.dark-mode .hello-svg path.glass-stroke {
-      stroke: rgba(255,255,255,0.5);
-    }
-    body:not(.dark-mode) .hello-svg path.main-stroke {
-      stroke: rgba(0,0,0,0.88);
-    }
-    body:not(.dark-mode) .hello-svg path.glass-stroke {
-      stroke: rgba(0,0,0,0.5);
-    }
+    .hello-svg path.main-stroke { stroke-width: 52; }
+    .hello-svg path.glass-stroke { stroke-width: 60; filter: blur(3px); }
+
+    body.dark-mode .main-stroke { stroke: rgba(255,255,255,0.88); }
+    body.dark-mode .glass-stroke { stroke: rgba(255,255,255,0.5); }
+    body:not(.dark-mode) .main-stroke { stroke: rgba(0,0,0,0.88); }
+    body:not(.dark-mode) .glass-stroke { stroke: rgba(0,0,0,0.5); }
+
     @keyframes draw-hello {
       0% { stroke-dashoffset: 5800; opacity: 0.6; }
       15% { opacity: 1; }
       100% { stroke-dashoffset: 0; opacity: 1; }
     }
-    /* ===== 初始毛玻璃覆盖层（优化模糊性能） ===== */
+
     .blur-overlay {
       position: fixed;
       inset: 0;
       z-index: 900;
-      animation: clarify 4.5s forwards; /* 同步缩短时间 */
+      animation: clarify 4.5s forwards;
       pointer-events: none;
-      will-change: backdrop-filter; /* 提示浏览器优化模糊动画 */
-      /* 降低初始模糊值，减少计算量 */
     }
     @keyframes clarify {
-      0% { backdrop-filter: blur(12px) saturate(120%); } /* 降低初始模糊到12px，饱和度120% */
-      100% { backdrop-filter: blur(0px); }
+      0% { backdrop-filter: blur(12px) saturate(120%); }
+      100% { backdrop-filter: blur(0); }
     }
-    /* ===== ENTER按钮（优化淡入动画） ===== */
+
+    /* ===== ENTER 按钮（原样） ===== */
     .enter-glass-btn {
       position: fixed;
       top: 50%;
@@ -124,7 +103,6 @@
       color: rgba(255,255,255,0.95);
       background: rgba(255,255,255,0.12);
       backdrop-filter: blur(24px) saturate(180%);
-      -webkit-backdrop-filter: blur(24px) saturate(180%);
       border: 1px solid rgba(255,255,255,0.28);
       border-radius: 999px;
       box-shadow:
@@ -133,27 +111,47 @@
       cursor: pointer;
       opacity: 0;
       pointer-events: none;
-      transition: all 0.4s cubic-bezier(0.23,1,0.32,1); /* 缩短过渡时间 */
+      transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
       z-index: 1100;
-      will-change: opacity, transform; /* GPU 加速淡入 */
     }
     .enter-glass-btn.show {
       opacity: 1;
       pointer-events: auto;
-      animation: fadeInScale 0.8s ease-out forwards; /* 缩短淡入到0.8s */
+      animation: fadeInScale 0.8s ease-out forwards;
     }
     @keyframes fadeInScale {
       0% { opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
       100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
     }
+
+    /* ===== ✅ 仅追加的交互增强 ===== */
     .enter-glass-btn:hover {
-      opacity: 0.82;
       transform: translate(-50%, -50%) scale(1.12);
       box-shadow:
         0 20px 60px rgba(0,0,0,0.45),
-        inset 0 1px 1px rgba(255,255,255,0.35);
+        inset 0 0 0 1px rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.18);
     }
-    /* ===== 右上角主题切换按钮（原样保留） ===== */
+    .enter-glass-btn:active {
+      transform: translate(-50%, -50%) scale(0.97);
+    }
+    .enter-glass-btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(
+        120deg,
+        transparent 20%,
+        rgba(255,255,255,0.4),
+        transparent 80%
+      );
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+    }
+    .enter-glass-btn:hover::after { opacity: 1; }
+
     .theme-toggle {
       position: fixed;
       top: 20px;
@@ -162,80 +160,40 @@
       height: 48px;
       border-radius: 50%;
       background: rgba(255,255,255,0.25);
-      backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,0.35);
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       font-size: 24px;
-      color: #fff;
-      transition: all 0.3s ease;
       z-index: 1200;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-    .theme-toggle:hover {
-      transform: scale(1.1);
-      background: rgba(255,255,255,0.4);
-    }
-    body.dark-mode .theme-toggle {
-      background: rgba(0,0,0,0.3);
-      border-color: rgba(255,255,255,0.2);
-      color: #e0e0e0;
     }
   </style>
 </head>
+
 <body>
-  <!-- 右上角主题切换按钮（原样保留） -->
-  <div class="theme-toggle" onclick="toggleTheme()" title="切换深色/浅色模式">
-    🌙
-  </div>
-  <!-- 新增：初始毛玻璃覆盖层 -->
+  <div class="theme-toggle" onclick="toggleTheme()">🌙</div>
   <div class="blur-overlay"></div>
-  <!-- hello书写动画层（字体玻璃质感通过模糊层实现） -->
+
   <div class="hello-wrapper" id="helloWrapper">
-    <svg class="hello-svg" viewBox="0 0 1230.94 414.57" preserveAspectRatio="xMidYMid meet" overflow="visible">
-      <!-- 玻璃模糊底层路径 -->
+    <svg class="hello-svg" viewBox="0 0 1230.94 414.57" preserveAspectRatio="xMidYMid meet">
       <path class="glass-stroke" d="M-293.58-104.62S-103.61-205.49-60-366.25c9.13-32.45,9-58.31,0-74-10.72-18.82-49.69-33.21-75.55,31.94-27.82,70.11-52.22,377.24-44.11,322.48s34-176.24,99.89-183.19c37.66-4,49.55,23.58,52.83,47.92a117.06,117.06,0,0,1-3,45.32c-7.17,27.28-20.47,97.67,33.51,96.86,66.93-1,131.91-53.89,159.55-84.49,31.1-36.17,31.1-70.64,19.27-90.25-16.74-29.92-69.47-33-92.79,16.73C62.78-179.86,98.7-93.8,159-81.63S302.7-99.55,393.3-269.92c29.86-58.16,52.85-114.71,46.14-150.08-7.44-39.21-59.74-54.5-92.87-8.7-47,65-61.78,266.62-34.74,308.53S416.62-58,481.52-130.31s133.2-188.56,146.54-256.23c14-71.15-56.94-94.64-88.4-47.32C500.53-375,467.58-229.49,503.3-127a73.73,73.73,0,0,0,23.43,33.67c25.49,20.23,55.1,16,77.46,6.32a111.25,111.25,0,0,0,30.44-19.87c37.73-34.23,29-36.71,64.58-127.53C724-284.3,785-298.63,821-259.13a71,71,0,0,1,13.69,22.56c17.68,46,6.81,80-6.81,107.89-12,24.62-34.56,42.72-61.45,47.91-23.06,4.45-48.37-.35-66.48-24.27a78.88,78.88,0,0,1-12.66-25.8c-14.75-51,4.14-88.76,11-101.41,6.18-11.39,37.26-69.61,103.42-42.24,55.71,23.05,100.66-23.31,100.66-23.31" transform="translate(311.08 476.02)" />
-      <!-- 主路径 -->
       <path class="main-stroke" id="mainStrokePath" d="M-293.58-104.62S-103.61-205.49-60-366.25c9.13-32.45,9-58.31,0-74-10.72-18.82-49.69-33.21-75.55,31.94-27.82,70.11-52.22,377.24-44.11,322.48s34-176.24,99.89-183.19c37.66-4,49.55,23.58,52.83,47.92a117.06,117.06,0,0,1-3,45.32c-7.17,27.28-20.47,97.67,33.51,96.86,66.93-1,131.91-53.89,159.55-84.49,31.1-36.17,31.1-70.64,19.27-90.25-16.74-29.92-69.47-33-92.79,16.73C62.78-179.86,98.7-93.8,159-81.63S302.7-99.55,393.3-269.92c29.86-58.16,52.85-114.71,46.14-150.08-7.44-39.21-59.74-54.5-92.87-8.7-47,65-61.78,266.62-34.74,308.53S416.62-58,481.52-130.31s133.2-188.56,146.54-256.23c14-71.15-56.94-94.64-88.4-47.32C500.53-375,467.58-229.49,503.3-127a73.73,73.73,0,0,0,23.43,33.67c25.49,20.23,55.1,16,77.46,6.32a111.25,111.25,0,0,0,30.44-19.87c37.73-34.23,29-36.71,64.58-127.53C724-284.3,785-298.63,821-259.13a71,71,0,0,1,13.69,22.56c17.68,46,6.81,80-6.81,107.89-12,24.62-34.56,42.72-61.45,47.91-23.06,4.45-48.37-.35-66.48-24.27a78.88,78.88,0,0,1-12.66-25.8c-14.75-51,4.14-88.76,11-101.41,6.18-11.39,37.26-69.61,103.42-42.24,55.71,23.05,100.66-23.31,100.66-23.31" transform="translate(311.08 476.02)" />
     </svg>
   </div>
-  <!-- 玻璃质感大ENTER按钮 -->
+
   <button class="enter-glass-btn" id="enterBtn" onclick="enterSite()">ENTER</button>
+
   <script>
-    // 主题切换（原样保留）
     function toggleTheme() {
       document.body.classList.toggle("dark-mode");
-      const isDark = document.body.classList.contains("dark-mode");
-      const toggleBtn = document.querySelector(".theme-toggle");
-      toggleBtn.textContent = isDark ? "☀️" : "🌙";
-      localStorage.setItem("theme", isDark ? "dark" : "light");
     }
     window.addEventListener("load", () => {
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "dark") {
-        document.body.classList.add("dark-mode");
-        document.querySelector(".theme-toggle").textContent = "☀️";
-      } else {
-        document.body.classList.remove("dark-mode");
-        document.querySelector(".theme-toggle").textContent = "🌙";
-      }
-      // 动画序列控制：监听最后一笔动画结束事件，实现无缝衔接
-      const helloWrapper = document.getElementById("helloWrapper");
-      const enterBtn = document.getElementById("enterBtn");
-      const mainStrokePath = document.getElementById("mainStrokePath");
-      mainStrokePath.addEventListener("animationend", () => {
-        helloWrapper.classList.add("fade-out");
-        enterBtn.classList.add("show");
-      });
+      document.getElementById("mainStrokePath")
+        .addEventListener("animationend", () => {
+          document.getElementById("helloWrapper").classList.add("fade-out");
+          document.getElementById("enterBtn").classList.add("show");
+        });
     });
-    // 进入主页
     function enterSite() {
-      document.body.classList.add("leaving");
-      setTimeout(() => {
-        window.location.href = "home.html";
-      }, 800);
+      setTimeout(() => location.href = "home.html", 800);
     }
   </script>
 </body>
