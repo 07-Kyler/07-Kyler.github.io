@@ -38,6 +38,7 @@
       padding-left: 340px;
     }
 
+    /* ===== sidebar（固定 + 内滚轮） ===== */
     .sidebar {
       position: fixed;
       left: 40px;
@@ -47,7 +48,6 @@
       max-height: calc(100vh - 160px);
       padding: 20px 14px;
       overflow-y: auto;
-      overflow-x: hidden;
       backdrop-filter: blur(18px);
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.30);
@@ -61,12 +61,33 @@
       background: rgba(30,30,30,0.65);
     }
 
+    /* 滚轮玻璃化 */
     .sidebar::-webkit-scrollbar {
       width: 6px;
     }
     .sidebar::-webkit-scrollbar-thumb {
       background: rgba(255,255,255,0.35);
       border-radius: 6px;
+    }
+
+    /* ===== sidebar 顶部返回按钮 ===== */
+    .sidebar-top {
+      margin-bottom: 16px;
+    }
+
+    .sidebar-top a {
+      display: block;
+      padding: 12px 16px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.30);
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .sidebar-top a:hover {
+      transform: translateX(6px);
+      background: rgba(255,255,255,0.28);
     }
 
     .sidebar ul {
@@ -91,6 +112,7 @@
       background: rgba(255,255,255,0.28);
     }
 
+    /* ===== 文章区域 ===== */
     article {
       max-width: 980px;
       padding: 36px 40px;
@@ -105,17 +127,57 @@
     body.dark-mode article {
       background: rgba(30,30,30,0.65);
     }
+
+    /* ===== 代码块：恢复毛玻璃 ===== */
+    pre {
+      background: rgba(30,30,30,0.65) !important;
+      backdrop-filter: blur(14px);
+      border-radius: 16px;
+      padding: 20px 24px;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    pre code.hljs {
+      background: transparent !important;
+    }
+
+    /* ===== 主题切换按钮 ===== */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.35);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      z-index: 1200;
+    }
+
+    body.dark-mode .theme-toggle {
+      background: rgba(0,0,0,0.3);
+      color: #e0e0e0;
+    }
   </style>
 </head>
 
 <body>
 
+<div class="theme-toggle" onclick="toggleTheme()">🌙</div>
+
 <div class="bg-mask">
   <aside class="sidebar">
+    <div class="sidebar-top">
+      <a href="/home.html">← 返回首页</a>
+    </div>
     <h2>📘 题解目录</h2>
     <ul id="menu"></ul>
-    <hr>
-    <a href="/home.html">← 返回首页</a>
   </aside>
 
   <div class="layout">
@@ -150,23 +212,34 @@ function loadNote(file) {
       const content = document.getElementById("content");
       content.innerHTML = `<article>${marked.parse(md)}</article>`;
 
-      /* ✅ 恢复 KaTeX 渲染（与你最早那版一致） */
-      if (typeof renderMathInElement === "function") {
-        renderMathInElement(content, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "$", right: "$", display: false }
-          ],
-          throwOnError: false
-        });
-      }
+      renderMathInElement(content, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false }
+        ],
+        throwOnError: false
+      });
 
-      /* ✅ 代码高亮（保持不变） */
-      document.querySelectorAll("pre code").forEach(block => {
+      content.querySelectorAll("pre code").forEach(block => {
         hljs.highlightElement(block);
       });
     });
 }
+
+/* 主题切换逻辑 */
+function toggleTheme() {
+  document.body.classList.toggle("dark-mode");
+  const isDark = document.body.classList.contains("dark-mode");
+  document.querySelector(".theme-toggle").textContent = isDark ? "☀️" : "🌙";
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+}
+
+window.addEventListener("load", () => {
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark-mode");
+    document.querySelector(".theme-toggle").textContent = "☀️";
+  }
+});
 </script>
 
 </body>
