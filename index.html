@@ -222,10 +222,8 @@
       setTimeout(() => {
         helloWrapper.classList.add("fade-out");
        
-        // 淡出进行到一半时就开始淡入ENTER（总等待时间更短，用户无明显等待感）
-        setTimeout(() => {
-          enterBtn.classList.add("show");
-        }, 300); // 只等0.3s就开始ENTER淡入
+        // 无缝衔接：淡出开始时立即淡入ENTER（去除0.3s等待）
+        enterBtn.classList.add("show");
       }, 5200); // 直接在5.2s书写结束后触发淡出
     });
     // 进入主页
