@@ -38,7 +38,7 @@
       color: #111111 !important;
     }
 
-    /* ===== hello书写动画容器（增强玻璃质感，更透明） ===== */
+    /* ===== hello书写动画容器（纯透明玻璃质感，无发光） ===== */
     .hello-wrapper {
       position: fixed;
       inset: 0;
@@ -47,7 +47,7 @@
       justify-content: center;
       z-index: 1000;
       pointer-events: none;
-      transition: opacity 1s ease; /* 用于淡出 */
+      transition: opacity 0.6s ease; /* 淡出加速 */
     }
 
     .hello-wrapper.fade-out {
@@ -55,16 +55,16 @@
     }
 
     .hello-svg {
-      width: 70vmin;
-      max-width: 700px;
+      width: 80vmin;          /* 稍增大，确保完整显示不被裁切 */
+      max-width: 800px;
       height: auto;
-      filter: drop-shadow(0 0 25px rgba(255,255,255,0.5)) drop-shadow(0 0 8px rgba(255,255,255,0.3));
+      /* 移除所有发光滤镜 */
     }
 
     .hello-svg path {
       fill: none;
-      stroke: rgba(255,255,255,0.75);           /* 更透明的玻璃白 */
-      stroke-width: 48;
+      stroke: rgba(255,255,255,0.88);           /* 高透明度玻璃白（接近图片中的柔和透明感） */
+      stroke-width: 52;                         /* 稍加粗，确保圆润不被裁切感 */
       stroke-linecap: round;
       stroke-miterlimit: 10;
       stroke-dasharray: 5800;
@@ -73,8 +73,8 @@
     }
 
     @keyframes draw-hello {
-      0%   { stroke-dashoffset: 5800; opacity: 0.4; }
-      10%  { opacity: 1; }
+      0%   { stroke-dashoffset: 5800; opacity: 0.6; }
+      15%  { opacity: 1; }
       100% { stroke-dashoffset: 0;   opacity: 1; }
     }
 
@@ -107,11 +107,11 @@
     .enter-glass-btn.show {
       opacity: 1;
       pointer-events: auto;
-      animation: fadeInScale 1.2s ease-out forwards;
+      animation: fadeInScale 1.0s ease-out forwards; /* 淡入稍快 */
     }
 
     @keyframes fadeInScale {
-      0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+      0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
       100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
     }
 
@@ -153,8 +153,6 @@
       border-color: rgba(255,255,255,0.2);
       color: #e0e0e0;
     }
-
-    /* 移除原 .enter-container 相关样式（已删除HTML，无需保留） */
   </style>
 </head>
 <body>
@@ -164,14 +162,14 @@
     🌙
   </div>
 
-  <!-- hello书写动画层（玻璃质感增强） -->
+  <!-- hello书写动画层（纯透明玻璃质感） -->
   <div class="hello-wrapper" id="helloWrapper">
     <svg class="hello-svg" viewBox="0 0 1230.94 414.57" preserveAspectRatio="xMidYMid meet">
       <path d="M-293.58-104.62S-103.61-205.49-60-366.25c9.13-32.45,9-58.31,0-74-10.72-18.82-49.69-33.21-75.55,31.94-27.82,70.11-52.22,377.24-44.11,322.48s34-176.24,99.89-183.19c37.66-4,49.55,23.58,52.83,47.92a117.06,117.06,0,0,1-3,45.32c-7.17,27.28-20.47,97.67,33.51,96.86,66.93-1,131.91-53.89,159.55-84.49,31.1-36.17,31.1-70.64,19.27-90.25-16.74-29.92-69.47-33-92.79,16.73C62.78-179.86,98.7-93.8,159-81.63S302.7-99.55,393.3-269.92c29.86-58.16,52.85-114.71,46.14-150.08-7.44-39.21-59.74-54.5-92.87-8.7-47,65-61.78,266.62-34.74,308.53S416.62-58,481.52-130.31s133.2-188.56,146.54-256.23c14-71.15-56.94-94.64-88.4-47.32C500.53-375,467.58-229.49,503.3-127a73.73,73.73,0,0,0,23.43,33.67c25.49,20.23,55.1,16,77.46,6.32a111.25,111.25,0,0,0,30.44-19.87c37.73-34.23,29-36.71,64.58-127.53C724-284.3,785-298.63,821-259.13a71,71,0,0,1,13.69,22.56c17.68,46,6.81,80-6.81,107.89-12,24.62-34.56,42.72-61.45,47.91-23.06,4.45-48.37-.35-66.48-24.27a78.88,78.88,0,0,1-12.66-25.8c-14.75-51,4.14-88.76,11-101.41,6.18-11.39,37.26-69.61,103.42-42.24,55.71,23.05,100.66-23.31,100.66-23.31" transform="translate(311.08 476.02)" />
     </svg>
   </div>
 
-  <!-- 玻璃质感大ENTER按钮（动画序列最后出现） -->
+  <!-- 玻璃质感大ENTER按钮 -->
   <button class="enter-glass-btn" id="enterBtn" onclick="enterSite()">ENTER</button>
 
   <script>
@@ -194,19 +192,18 @@
         document.querySelector(".theme-toggle").textContent = "🌙";
       }
 
-      // 动画序列控制
+      // 动画序列控制：书写完立即开始淡出（无停顿），淡出更快
       const helloWrapper = document.getElementById("helloWrapper");
       const enterBtn = document.getElementById("enterBtn");
 
       setTimeout(() => {
-        // 书写完 → 开始淡出 hello
         helloWrapper.classList.add("fade-out");
         
-        // 淡出完成后（1s动画） → 显示 ENTER 按钮
+        // 淡出进行到一半时就开始淡入ENTER（总等待时间更短，用户无明显等待感）
         setTimeout(() => {
           enterBtn.classList.add("show");
-        }, 1000);
-      }, 5200 + 500); // 5.2s 书写 + 0.5s 短暂停顿再淡出
+        }, 300); // 只等0.3s就开始ENTER淡入
+      }, 5200); // 直接在5.2s书写结束后触发淡出
     });
 
     // 进入主页
