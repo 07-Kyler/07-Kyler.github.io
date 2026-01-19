@@ -51,7 +51,7 @@
     }
 
     /* =========================
-       sidebar：独立滚动
+       ★核心修改：sidebar 固定（sticky）
     ========================= */
     .sidebar {
       width: 260px;
@@ -62,6 +62,10 @@
 
       max-height: calc(100vh - 180px);
       overflow-y: auto;
+
+      position: sticky;
+      top: 120px;
+      align-self: flex-start;
     }
 
     body:not(.dark-mode) .sidebar {
@@ -71,45 +75,29 @@
       background: rgba(30,30,30,0.65);
     }
 
-    /* =========================
-       ★新增：玻璃风格滚动条（核心改动）
-    ========================= */
-
-    /* Chrome / Edge / Safari */
-    .sidebar::-webkit-scrollbar {
-      width: 10px;
-    }
-
+    /* 玻璃滚动条 */
+    .sidebar::-webkit-scrollbar { width: 10px; }
     .sidebar::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255,255,255,0.08);
       border-radius: 10px;
       backdrop-filter: blur(12px);
     }
-
     .sidebar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.28);
+      background: rgba(255,255,255,0.28);
       border-radius: 10px;
-      border: 2px solid rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255,255,255,0.12);
     }
-
     .sidebar::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.45);
+      background: rgba(255,255,255,0.45);
     }
 
     body.dark-mode .sidebar::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.25);
+      background: rgba(0,0,0,0.25);
     }
-
     body.dark-mode .sidebar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.22);
+      background: rgba(255,255,255,0.22);
     }
 
-    body.dark-mode .sidebar::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.35);
-    }
-
-    /* Firefox */
     .sidebar {
       scrollbar-width: thin;
       scrollbar-color: rgba(255,255,255,0.35) rgba(255,255,255,0.10);
@@ -118,8 +106,6 @@
     body.dark-mode .sidebar {
       scrollbar-color: rgba(255,255,255,0.30) rgba(0,0,0,0.25);
     }
-
-    /* ========================= */
 
     .sidebar-top {
       margin-bottom: 16px;
@@ -193,30 +179,7 @@
       background: rgba(0,0,0,0.25);
     }
 
-    pre code.hljs {
-      background: transparent !important;
-    }
-
-    body:not(.dark-mode) .hljs { color: #e6e6e6; }
-    body:not(.dark-mode) .hljs-keyword,
-    body:not(.dark-mode) .hljs-selector-tag,
-    body:not(.dark-mode) .hljs-literal {
-      color: #ffb86c;
-      font-weight: 600;
-    }
-    body:not(.dark-mode) .hljs-string,
-    body:not(.dark-mode) .hljs-title,
-    body:not(.dark-mode) .hljs-name {
-      color: #7dd3fc;
-    }
-    body:not(.dark-mode) .hljs-number,
-    body:not(.dark-mode) .hljs-symbol {
-      color: #f472b6;
-    }
-    body:not(.dark-mode) .hljs-comment {
-      color: rgba(220,220,220,0.55);
-      font-style: italic;
-    }
+    pre code.hljs { background: transparent !important; }
 
     .theme-toggle {
       position: fixed;
@@ -238,7 +201,6 @@
 
     body.dark-mode .theme-toggle {
       background: rgba(0,0,0,0.3);
-      border-color: rgba(255,255,255,0.2);
       color: #e0e0e0;
     }
   </style>
@@ -254,14 +216,13 @@
       <div class="sidebar-top">
         <a href="/home.html">← 返回首页</a>
       </div>
-
       <h2>📘 题解目录</h2>
       <ul id="menu"></ul>
     </aside>
 
     <main class="content" id="content">
       <article>
-        <h2><----左边点菜</h2>
+        <h2>客官想看哪篇题解</h2>
         <p>(^_^)</p>
       </article>
     </main>
@@ -289,52 +250,15 @@ function loadNote(filename) {
     .then(md => {
       const content = document.getElementById("content");
       content.innerHTML = `<article>${marked.parse(md)}</article>`;
-
-      if (typeof renderMathInElement === 'function') {
-        renderMathInElement(content, {
-          delimiters: [
-            {left: '$$', right: '$$', display: true},
-            {left: '$', right: '$', display: false}
-          ],
-          throwOnError: false
-        });
-      }
-
       if (typeof hljs !== 'undefined') {
-        content.querySelectorAll('pre code').forEach(block => {
-          hljs.highlightElement(block);
-        });
+        content.querySelectorAll('pre code').forEach(b => hljs.highlightElement(b));
       }
-
-      updateContentColors();
     });
-}
-
-function updateContentColors() {
-  const isDark = document.body.classList.contains("dark-mode");
-  document.querySelectorAll(
-    'article h1, article h2, article h3, article p, article li'
-  ).forEach(el => {
-    el.style.color = isDark ? '#e0e0e0' : '#111111';
-  });
 }
 
 function toggleTheme() {
   document.body.classList.toggle("dark-mode");
-  const isDark = document.body.classList.contains("dark-mode");
-  document.querySelector(".theme-toggle").textContent = isDark ? "☀️" : "🌙";
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-  updateContentColors();
 }
-
-window.addEventListener("load", () => {
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "dark") {
-    document.body.classList.add("dark-mode");
-    document.querySelector(".theme-toggle").textContent = "☀️";
-  }
-  updateContentColors();
-});
 </script>
 </body>
 </html>
