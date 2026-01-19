@@ -161,8 +161,6 @@
       text-decoration: none;
       cursor: pointer;
       transition: all 0.20s ease;
-
-      /* ★ 修改这里，允许换行 */
       white-space: normal;
       word-break: break-word;
     }
@@ -232,8 +230,10 @@
       border: 1px solid rgba(0,0,0,0.15);
     }
 
+    /* ===== 最小侵入修改: 仅提高代码字体对比度 ===== */
     pre code.hljs {
       background: transparent !important;
+      color: #111 !important;  /* ★ 提高浅色背景下对比度 */
     }
 
     .theme-toggle {
