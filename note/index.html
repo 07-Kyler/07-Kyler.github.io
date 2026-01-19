@@ -70,7 +70,6 @@
       background: rgba(30,30,30,0.65);
     }
 
-    /* 侧边栏滚动条毛玻璃 */
     .sidebar::-webkit-scrollbar {
       width: 8px;
     }
@@ -105,7 +104,6 @@
       transition: all 0.25s ease;
     }
 
-    /* ★新增：悬停时向右“伸出”的玻璃交互（最小侵入） */
     .sidebar a:hover {
       transform: translateX(10px);
       background: rgba(255,255,255,0.22);
@@ -136,7 +134,6 @@
       background: rgba(30,30,30,0.65);
     }
 
-    /* Markdown 横线恢复细线 */
     article hr {
       border: none;
       height: 1px;
@@ -147,6 +144,7 @@
       background: rgba(0, 0, 0, 0.25);
     }
 
+    /* ===== 代码块基础 ===== */
     pre {
       background: rgba(30,30,30,0.7);
       padding: 20px 24px;
@@ -155,8 +153,16 @@
       overflow-x: auto;
       margin: 1.5em 0;
     }
+
+    /* ★恢复：浅色模式代码块对比度增强（最小侵入） */
     body:not(.dark-mode) pre {
-      background: rgba(0,0,0,0.25);
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(0,0,0,0.15);
+    }
+
+    body:not(.dark-mode) pre code {
+      color: #1f2328;
+      font-weight: 500;
     }
 
     pre code.hljs {
