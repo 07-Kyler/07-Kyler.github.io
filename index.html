@@ -58,17 +58,16 @@
     }
     .hello-svg path.main-stroke {
       fill: none;
-      stroke: rgba(255,255,255,0.88);
       stroke-width: 52;
       stroke-linecap: round;
       stroke-miterlimit: 10;
       stroke-dasharray: 5800;
       stroke-dashoffset: 5800;
       animation: draw-hello 5.2s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      transition: stroke 0.4s ease; /* 实时切换颜色过渡 */
     }
     .hello-svg path.glass-stroke {
       fill: none;
-      stroke: rgba(255,255,255,0.5);
       stroke-width: 60;
       stroke-linecap: round;
       stroke-miterlimit: 10;
@@ -76,6 +75,20 @@
       stroke-dashoffset: 5800;
       animation: draw-hello 5.2s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
       filter: blur(3px); /* 模糊层模拟玻璃厚度与透明感 */
+      transition: stroke 0.4s ease; /* 实时切换颜色过渡 */
+    }
+    /* 适配深浅模式颜色（白色/黑色） */
+    body.dark-mode .hello-svg path.main-stroke {
+      stroke: rgba(255,255,255,0.88);
+    }
+    body.dark-mode .hello-svg path.glass-stroke {
+      stroke: rgba(255,255,255,0.5);
+    }
+    body:not(.dark-mode) .hello-svg path.main-stroke {
+      stroke: rgba(0,0,0,0.88);
+    }
+    body:not(.dark-mode) .hello-svg path.glass-stroke {
+      stroke: rgba(0,0,0,0.5);
     }
     @keyframes draw-hello {
       0% { stroke-dashoffset: 5800; opacity: 0.6; }
@@ -174,7 +187,7 @@
   </div>
   <!-- 新增：初始毛玻璃覆盖层 -->
   <div class="blur-overlay"></div>
-  <!-- hello书写动画层（恢复最初居中版本的viewBox + 防止裁剪） -->
+  <!-- hello书写动画层（字体玻璃质感通过模糊层实现） -->
   <div class="hello-wrapper" id="helloWrapper">
     <svg class="hello-svg" viewBox="0 0 1230.94 414.57" preserveAspectRatio="xMidYMid meet" overflow="visible">
       <!-- 玻璃模糊底层路径 -->
