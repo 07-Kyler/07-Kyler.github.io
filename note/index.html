@@ -122,6 +122,39 @@
     pre code.hljs {
       background: transparent !important;
     }
+
+    /* =========================
+   浅色模式下：增强代码高亮可读性
+   仅影响代码文字，不影响背景和布局
+========================= */
+body:not(.dark-mode) .hljs {
+  color: #e6e6e6; /* 整体基色提亮 */
+}
+
+/* 关键语法色单独增强对比度 */
+body:not(.dark-mode) .hljs-keyword,
+body:not(.dark-mode) .hljs-selector-tag,
+body:not(.dark-mode) .hljs-literal {
+  color: #ffb86c; /* 偏橙，醒目 */
+  font-weight: 600;
+}
+
+body:not(.dark-mode) .hljs-string,
+body:not(.dark-mode) .hljs-title,
+body:not(.dark-mode) .hljs-name {
+  color: #7dd3fc; /* 偏蓝，提高区分度 */
+}
+
+body:not(.dark-mode) .hljs-number,
+body:not(.dark-mode) .hljs-symbol {
+  color: #f472b6; /* 粉色数字，明显但不刺眼 */
+}
+
+body:not(.dark-mode) .hljs-comment {
+  color: rgba(220,220,220,0.55); /* 注释弱化但仍清晰 */
+  font-style: italic;
+}
+
   </style>
 </head>
 
