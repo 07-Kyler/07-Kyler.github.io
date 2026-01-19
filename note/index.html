@@ -230,10 +230,14 @@
       border: 1px solid rgba(0,0,0,0.15);
     }
 
-    /* ===== 最小侵入修改: 仅提高代码字体对比度 ===== */
-    pre code.hljs {
+    /* ===== 最小侵入修改: 浅色/深色模式分别设置代码字体颜色 ===== */
+    body:not(.dark-mode) pre code.hljs {
       background: transparent !important;
-      color: #111 !important;  /* ★ 提高浅色背景下对比度 */
+      color: #111 !important;  /* 浅色背景下高对比 */
+    }
+    body.dark-mode pre code.hljs {
+      background: transparent !important;
+      color: #e0e0e0 !important;  /* 深色背景下高对比 */
     }
 
     .theme-toggle {
