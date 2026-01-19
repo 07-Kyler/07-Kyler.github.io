@@ -55,7 +55,6 @@
       position: fixed;
       left: 40px;
       top: 20px;
-      /*width: 260px;*/
       padding: 12px 16px;
       backdrop-filter: blur(18px);
       border-radius: 16px;
@@ -65,10 +64,16 @@
       font-weight: 500;
       z-index: 1100;
       transition: all 0.25s ease;
+
+      /* ★新增：浅色模式文字颜色（覆盖默认蓝/紫色） */
+      color: #1f2328;
     }
 
     body.dark-mode .back-home {
       background: rgba(30,30,30,0.65);
+
+      /* ★新增：深色模式文字颜色 */
+      color: #f1f5f9;
     }
 
     .back-home:hover {
