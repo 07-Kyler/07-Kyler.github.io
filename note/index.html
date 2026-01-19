@@ -38,20 +38,16 @@
       padding-left: 340px;
     }
 
-    /* ⭐ 完整修复后的 sidebar */
     .sidebar {
       position: fixed;
       left: 40px;
       top: 50%;
       transform: translateY(-50%);
-
       width: 260px;
       max-height: calc(100vh - 160px);
       padding: 20px 14px;
-
       overflow-y: auto;
       overflow-x: hidden;
-
       backdrop-filter: blur(18px);
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.30);
@@ -65,16 +61,12 @@
       background: rgba(30,30,30,0.65);
     }
 
-    /* 滚动条细化（不破坏玻璃风格） */
     .sidebar::-webkit-scrollbar {
       width: 6px;
     }
     .sidebar::-webkit-scrollbar-thumb {
       background: rgba(255,255,255,0.35);
       border-radius: 6px;
-    }
-    .sidebar::-webkit-scrollbar-track {
-      background: transparent;
     }
 
     .sidebar ul {
@@ -155,10 +147,24 @@ function loadNote(file) {
   fetch(file)
     .then(res => res.text())
     .then(md => {
-      document.getElementById("content").innerHTML =
-        `<article>${marked.parse(md)}</article>`;
-      renderMathInElement(document.body);
-      document.querySelectorAll("pre code").forEach(hljs.highlightElement);
+      const content = document.getElementById("content");
+      content.innerHTML = `<article>${marked.parse(md)}</article>`;
+
+      /* ✅ 恢复 KaTeX 渲染（与你最早那版一致） */
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(content, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ],
+          throwOnError: false
+        });
+      }
+
+      /* ✅ 代码高亮（保持不变） */
+      document.querySelectorAll("pre code").forEach(block => {
+        hljs.highlightElement(block);
+      });
     });
 }
 </script>
