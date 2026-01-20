@@ -108,6 +108,11 @@
     body.dark-mode nav button.active {
       background: rgba(255,255,255,0.35);
     }
+    body:not(.dark-mode) nav button.active {
+      /* 新增：浅色模式下为active按钮添加轻微边框和阴影，以突出毛玻璃框框 */
+      border: 1px solid rgba(0,0,0,0.1); /* 轻微黑色边框增强可见性 */
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* 轻微阴影提升浮动感，使框框更明显 */
+    }
     /* 新增：鼠标悬停时的交互动画 */
     nav button:hover {
       background: rgba(255,255,255,0.35); /* 悬停时背景稍深，增强互动感 */
