@@ -253,6 +253,36 @@
       border-color: rgba(255,255,255,0.2);
       color: #e0e0e0;
     }
+    /* 新增：名言卡片样式（匹配毛玻璃主题，固定在页面底部中心） */
+    #quote-card {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 600px;
+      padding: 16px 24px;
+      backdrop-filter: blur(20px) saturate(150%);
+      -webkit-backdrop-filter: blur(20px) saturate(150%);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      text-align: center;
+      font-style: italic;
+      font-size: 16px;
+      z-index: 1000;
+      transition: all 0.4s ease, opacity 0.5s ease; /* 新增：为淡入淡出添加opacity过渡 */
+      cursor: pointer; /* 新增：鼠标悬停时显示指针，表示可点击 */
+    }
+    body:not(.dark-mode) #quote-card {
+      background: rgba(255,255,255,0.5);
+      border: 1px solid rgba(0,0,0,0.15);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+    body.dark-mode #quote-card {
+      background: rgba(30,30,30,0.7);
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    }
   </style>
 </head>
 <body> <!-- 默认浅色模式，不加 class -->
@@ -315,6 +345,8 @@
       </div>
     </div>
   </main>
+  <!-- 新增：名言显示容器（固定在页面底部中心） -->
+  <div id="quote-card"></div>
   <script>
     // 模块切换
     function showModule(id, btn) {
@@ -392,7 +424,7 @@
       document.body.classList.add("theme-switching");
       document.body.classList.toggle("dark-mode");
       const isDark = document.body.classList.contains("dark-mode");
-     
+    
       const toggleBtn = document.querySelector(".theme-toggle");
       toggleBtn.textContent = isDark ? "☀️" : "🌙";
       localStorage.setItem("theme", isDark ? "dark" : "light");
@@ -410,6 +442,47 @@
         document.body.classList.remove("dark-mode");
         document.querySelector(".theme-toggle").textContent = "🌙";
       }
+      // 新增：页面加载时渲染随机名言
+      renderRandomQuote();
+    });
+    // 新增：算法大师名言数组（扩展到15句）
+    const quotes = [
+      { text: "算法是计算机科学的灵魂。 - Donald Knuth", author: "Donald Knuth" },
+      { text: "好的算法可以让不可能变得可能。 - Alan Turing", author: "Alan Turing" },
+      { text: "效率不是一切，但没有效率，一切皆无。 - Edsger Dijkstra", author: "Edsger Dijkstra" },
+      { text: "编程是思考的过程，不是打字的过程。 - Linus Torvalds", author: "Linus Torvalds" },
+      { text: "算法的优雅在于其简单性。 - Robert Tarjan", author: "Robert Tarjan" },
+      { text: "The only way to learn a new programming language is by writing programs in it.", author: "Dennis Ritchie" },
+      { text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.", author: "Martin Fowler" },
+      { text: "Programs must be written for people to read, and only incidentally for machines to execute.", author: "Harold Abelson" },
+      { text: "Talk is cheap. Show me the code.", author: "Linus Torvalds" },
+      { text: "Premature optimization is the root of all evil.", author: "Donald Knuth" },
+      { text: "Simplicity is the ultimate sophistication.", author: "Leonardo da Vinci" },
+      { text: "Testing can show the presence of bugs, but not their absence.", author: "Edsger Dijkstra" },
+      { text: "The best way to predict the future is to implement it.", author: "David Heinemeier Hansson" },
+      { text: "Code is like humor. When you have to explain it, it’s bad.", author: "Cory House" },
+      { text: "First, solve the problem. Then, write the code.", author: "John Johnson" },
+      { text: "Experience is the name everyone gives to their mistakes.", author: "Oscar Wilde" }
+    ];
+    // 新增：渲染随机名言函数（带淡入淡出动画）
+    function renderRandomQuote() {
+      const quoteCard = document.getElementById('quote-card');
+      quoteCard.style.opacity = 0; // 先淡出
+      setTimeout(() => {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        const quote = quotes[randomIndex];
+        quoteCard.innerHTML = `
+          <p>"${quote.text}"</p>
+          <small>— ${quote.author}</small>
+        `;
+        quoteCard.style.opacity = 1; // 再淡入
+      }, 500); // 淡出时间匹配transition 0.5s
+    }
+    // 新增：页面加载后设置定时切换（每10秒一次）和点击切换
+    window.addEventListener("load", () => {
+      const quoteCard = document.getElementById('quote-card');
+      quoteCard.onclick = renderRandomQuote; // 点击切换
+      setInterval(renderRandomQuote, 10000); // 定时切换，每10秒
     });
   </script>
 </body>
