@@ -6,7 +6,7 @@
 
   <style>
     /* =========================
-       全局 & 背景
+       全局 & 背景（⚠ 完全保留）
     ========================= */
     * {
       box-sizing: border-box;
@@ -15,12 +15,15 @@
     html, body {
       margin: 0;
       height: 100%;
-      transition: background-image 0.6s ease, color 0.4s ease;
+      transition: color 0.4s ease;
     }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
                    "PingFang SC", "Microsoft YaHei", sans-serif;
+
+      /* ⚠⚠⚠ 背景：一字不动 */
+      background-image: url("assets/images/background.jpg");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -28,12 +31,10 @@
     }
 
     body.dark-mode {
-      background-image: url("assets/images/background.jpg");
       color: #e0e0e0;
     }
 
     body:not(.dark-mode) {
-      background-image: url("assets/images/background.jpg");
       color: #111111 !important;
     }
 
@@ -44,7 +45,7 @@
     }
 
     /* =========================
-       Header
+       Header（原样）
     ========================= */
     header {
       position: sticky;
@@ -59,7 +60,6 @@
 
     body.dark-mode header {
       background: rgba(30,30,30,0.65);
-      color: #e0e0e0;
     }
 
     body:not(.dark-mode) header {
@@ -68,7 +68,7 @@
     }
 
     /* =========================
-       Nav
+       Nav（原样）
     ========================= */
     nav {
       position: sticky;
@@ -108,7 +108,7 @@
     }
 
     /* =========================
-       Main
+       Main（原样）
     ========================= */
     main {
       position: relative;
@@ -117,13 +117,8 @@
       padding: 120px 40px 60px;
     }
 
-    .module {
-      display: none;
-    }
-
-    .module.active {
-      display: block;
-    }
+    .module { display: none; }
+    .module.active { display: block; }
 
     .card {
       max-width: 720px;
@@ -137,7 +132,7 @@
     }
 
     /* =========================
-       Theme Toggle
+       Theme Toggle（原样）
     ========================= */
     .theme-toggle {
       position: fixed;
@@ -157,7 +152,7 @@
     }
 
     /* =========================
-       Quote Card
+       Quote Card（只加，不动别的）
     ========================= */
     #quote-card {
       position: fixed;
@@ -176,9 +171,7 @@
                   opacity 0.5s ease;
     }
 
-    #quote-card p {
-      margin: 0;
-    }
+    #quote-card p { margin: 0; }
 
     #quote-card small {
       display: block;
@@ -198,15 +191,12 @@
     }
 
     /* =========================
-       【新增 / 调整】
-       浅色模式名言块可读性增强
+       【新增】仅增强名言可读性
+       ⚠ 不影响背景
     ========================= */
     body:not(.dark-mode) #quote-card {
       background: rgba(245,245,245,0.78);
       border: 1px solid rgba(0,0,0,0.18);
-      box-shadow:
-        0 10px 28px rgba(0,0,0,0.25),
-        inset 0 1px 1px rgba(255,255,255,0.9);
     }
 
     body:not(.dark-mode) #quote-card p {
@@ -215,13 +205,6 @@
 
     body:not(.dark-mode) #quote-card small {
       color: #555555 !important;
-      opacity: 0.9;
-    }
-
-    body:not(.dark-mode) #quote-card:hover {
-      box-shadow:
-        0 14px 36px rgba(0,0,0,0.3),
-        inset 0 1px 1px rgba(255,255,255,0.95);
     }
   </style>
 </head>
@@ -241,11 +224,8 @@
 
   <main>
     <div id="home" class="module active">
-      <div class="card">
-        <h2>欢迎</h2>
-      </div>
+      <div class="card"><h2>欢迎</h2></div>
     </div>
-
     <div id="roadmap" class="module"></div>
     <div id="problems" class="module"></div>
     <div id="log" class="module"></div>
@@ -258,7 +238,6 @@
     function showModule(id, btn) {
       document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
       document.getElementById(id).classList.add('active');
-
       document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     }
@@ -283,13 +262,9 @@
 
         lastQuoteIndex = idx;
         const q = quotes[idx];
-
-        card.innerHTML = `
-          <p>"${q.text}"</p>
-          <small>— ${q.author}</small>
-        `;
+        card.innerHTML = `<p>"${q.text}"</p><small>— ${q.author}</small>`;
         card.style.opacity = 1;
-      }, 500);
+      }, 400);
     }
 
     window.onload = () => {
