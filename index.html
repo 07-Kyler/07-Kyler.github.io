@@ -143,7 +143,7 @@
     .enter-glass-btn.show {
       opacity: 1;
       pointer-events: auto;
-      animation: fadeInScale 0.8s ease-out forwards;
+      animation: fadeInScale 0.8s ease-out; /* ← 唯一修改：删掉 forwards */
     }
 
     @keyframes fadeInScale {
@@ -151,12 +151,12 @@
       100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
     }
 
-    /* ===== 新增：悬停放大（不覆盖原逻辑） ===== */
+    /* ===== 悬停放大 ===== */
     .enter-glass-btn:hover {
       transform: translate(-50%, -50%) scale(1.15);
     }
 
-    /* ===== 新增：点击果冻动画 ===== */
+    /* ===== 点击果冻动画 ===== */
     .enter-glass-btn:active {
       animation: jelly 0.45s ease;
     }
