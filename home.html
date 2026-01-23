@@ -361,6 +361,7 @@
   </main>
   <!-- 名言显示容器（固定在页面底部中心） -->
   <div id="quote-card"></div>
+
   <script>
     // 模块切换（保持原样）
     function showModule(id, btn) {
@@ -510,6 +511,75 @@
       quoteCard.onclick = renderRandomQuote; // 点击切换
       setInterval(renderRandomQuote, 10000); // 定时切换，每10秒
     });
+
+    /* =========================
+       新增：网站回忆（最小侵入，直接追加内容，不改动其他逻辑）
+       - 我只在此处添加了 memoryMarkdown 与 renderMemory()
+       - 并在页面中保留了调用 renderMemory() 的单行
+    ========================= */
+    // （新增）Markdown 渲染：通过浏览器端简单渲染（若要从外部 md 加载可另扩展）
+    (function(){
+      // 为了最小侵入，我使用一个非常简单的内联 Markdown parser（若你不想引入外部库）
+      // 但为了渲染效果更好，可以引入 marked 等库 — 我这里保留最小化实现：
+      // 如果你希望我改为 CDN 引入 marked 并用 marked.parse，请回复我即可。
+    })();
+
+    // ===== 插入的网站回忆内容（可改） =====
+    const memoryMarkdown = `
+### 2026-01-15
+- 初次搭建个人网站
+- 完成基础页面结构
+
+### 2026-01-16
+- 引入深色 / 浅色模式
+- 添加毛玻璃效果
+
+### 2026-01-18
+- 新增名言卡片模块
+- 支持自动切换与点击切换
+
+### 2026-01-20
+- 新增“网站回忆”栏目（用于记录网站自身的修改历史）
+`;
+
+    // 为了兼容性与“最小侵入”，我在此处尝试使用浏览器上的简单转义（若你已经在 <head> 引入了 marked，可替换为 marked.parse）
+    function simpleMdToHtml(md){
+      // 极简转换：标题 & 列表 & 空行处理（仅用于回忆模块，足够使用）
+      let html = md
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      // 转 H3
+      html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+      // 转 UL items
+      html = html.replace(/^\s*-\s+(.*$)/gim, '<li>$1</li>');
+      // 将连续的 <li> 包成 <ul>
+      html = html.replace(/(<li>[\s\S]*?<\/li>)/gim, function(m){
+        if(m.indexOf('<li>')===0){
+          return '<ul>' + m.replace(/<\/li>\s*<li>/g,'</li><li>') + '</ul>';
+        }
+        return m;
+      });
+      // 段落
+      html = html.replace(/\n{2,}/g, '</p><p>');
+      html = '<p>' + html + '</p>';
+      // 清理空的段落
+      html = html.replace(/<p><\/p>/g, '');
+      return html;
+    }
+
+    function renderMemory() {
+      const container = document.getElementById("memory-content");
+      if(!container) {
+        // 如果页面中暂时没有 memory 容器（保持最小侵入，不强制创建）
+        return;
+      }
+      // 使用简单解析渲染（安全、无需外部依赖）
+      container.innerHTML = simpleMdToHtml(memoryMarkdown);
+    }
+
+    // 在页面加载时调用一次（不影响其他 load 监听）
+    window.addEventListener('load', renderMemory);
 
   </script>
 </body>
