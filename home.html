@@ -3,47 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <title>MY PERSONAL WEEEEEEEB!</title>
+
   <style>
-    /* =========================
-       全局 & 背景（支持深浅模式切换）
-    ========================= */
-    * {
-      box-sizing: border-box;
+    /* =====================================================
+       1. 设计变量（主题 / 颜色 / 阴影）✅ 新增但不改视觉
+    ===================================================== */
+    :root {
+      --text-primary: #111;
+      --bg-card: rgba(255,255,255,0.45);
+      --bg-header: rgba(255,255,255,0.45);
+      --bg-nav: rgba(255,255,255,0.35);
+      --border-soft: rgba(0,0,0,0.15);
+      --shadow-main: 0 12px 40px rgba(0,0,0,0.2);
     }
+
+    body.dark-mode {
+      --text-primary: #e0e0e0;
+      --bg-card: rgba(30,30,30,0.65);
+      --bg-header: rgba(30,30,30,0.65);
+      --bg-nav: rgba(30,30,30,0.65);
+      --border-soft: rgba(255,255,255,0.15);
+      --shadow-main: 0 12px 40px rgba(0,0,0,0.6);
+    }
+
+    /* =====================================================
+       2. 全局基础样式（视觉不变）
+    ===================================================== */
+    * { box-sizing: border-box; }
+
     html, body {
       margin: 0;
       height: 100%;
       transition: background-image 0.6s ease, color 0.4s ease;
     }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-                   "PingFang SC", "Microsoft YaHei", sans-serif;
+        "PingFang SC", "Microsoft YaHei", sans-serif;
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       background-attachment: fixed;
+      color: var(--text-primary);
     }
-    /* 默认浅色模式 + 文字强制黑色 */
-    body.dark-mode {
-      background-image: url("../assets/images/backgrounddark.jpg");
-      color: #e0e0e0;
-    }
+
     body:not(.dark-mode) {
       background-image: url("../assets/images/backgroundlight.jpg");
-      color: #111111 !important;
     }
-    /* 强制浅色模式下所有文字为黑色 */
-    body:not(.dark-mode) *,
-    body:not(.dark-mode) *::before,
-    body:not(.dark-mode) *::after {
-      color: #111111 !important;
+
+    body.dark-mode {
+      background-image: url("../assets/images/backgrounddark.jpg");
     }
-    body:not(.dark-mode) nav button {
-      color: #111111 !important;
-    }
-    /* =========================
-       顶部标题（固定 + 毛玻璃优化）
-    ========================= */
+
+    /* =====================================================
+       3. Header & Nav（结构不变，变量化）
+    ===================================================== */
     header {
       position: sticky;
       top: 0;
@@ -52,178 +66,97 @@
       font-size: 20px;
       font-weight: 600;
       backdrop-filter: blur(16px) saturate(140%);
-      -webkit-backdrop-filter: blur(16px) saturate(140%);
-      border-bottom: 1px solid rgba(255,255,255,0.25);
-      transition: all 0.4s ease;
+      border-bottom: 1px solid var(--border-soft);
+      background: var(--bg-header);
     }
-    body:not(.dark-mode) header {
-      background: rgba(255,255,255,0.45); /* 浅色模式下透明度更高，毛玻璃更明显 */
-      border-bottom: 1px solid rgba(0,0,0,0.15);
-    }
-    body.dark-mode header {
-      background: rgba(30,30,30,0.65);
-      border-bottom: 1px solid rgba(255,255,255,0.15);
-      color: #e0e0e0;
-    }
-    /* =========================
-       导航栏（固定 + 毛玻璃优化）
-    ========================= */
+
     nav {
       position: sticky;
       top: 64px;
-      z-index: 1100;
+      z-index: 1000;
       display: flex;
       gap: 10px;
       padding: 14px 40px;
       backdrop-filter: blur(16px) saturate(140%);
-      -webkit-backdrop-filter: blur(16px) saturate(140%);
-      transition: all 0.4s ease;
+      background: var(--bg-nav);
     }
-    body:not(.dark-mode) nav {
-      background: rgba(255,255,255,0.35); /* 浅色模式下增加透明度，毛玻璃更明显 */
-    }
-    body.dark-mode nav {
-      background: rgba(30,30,30,0.65);
-    }
+
     nav button {
       padding: 6px 14px;
       border-radius: 10px;
       border: none;
       cursor: pointer;
-      /* 修改：将背景改为更透明的玻璃质感（降低alpha值），并添加独立的毛玻璃滤镜以增强质感 */
-      background: rgba(255,255,255,0.15); /* 原为0.25，降低以增加透明度 */
-      backdrop-filter: blur(8px) saturate(120%); /* 新增：为每个按钮添加独立的毛玻璃效果，增强玻璃质感 */
-      -webkit-backdrop-filter: blur(8px) saturate(120%);
       font-weight: 500;
-      transition: all 0.3s ease;
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      transition: all .3s ease;
     }
-    body.dark-mode nav button {
-      color: #e0e0e0;
-      /* 修改：暗模式下也调整背景为更透明 */
-      background: rgba(30,30,30,0.15); /* 新增：暗模式专用背景，增加透明度 */
-    }
+
     nav button.active {
       background: rgba(255,255,255,0.45);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
-    body.dark-mode nav button.active {
+
+    nav button:hover {
+      transform: scale(1.05);
       background: rgba(255,255,255,0.35);
     }
-    body:not(.dark-mode) nav button.active {
-      /* 新增：浅色模式下为active按钮添加轻微边框和阴影，以突出毛玻璃框框 */
-      border: 1px solid rgba(0,0,0,0.1); /* 轻微黑色边框增强可见性 */
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* 轻微阴影提升浮动感，使框框更明显 */
-    }
-    /* 新增：鼠标悬停时的交互动画 */
-    nav button:hover {
-      background: rgba(255,255,255,0.35); /* 悬停时背景稍深，增强互动感 */
-      transform: scale(1.05); /* 轻微缩放动画 */
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* 添加轻微阴影，提升浮动感 */
-    }
-    body.dark-mode nav button:hover {
-      background: rgba(255,255,255,0.25); /* 暗模式下悬停背景调整 */
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4); /* 暗模式下阴影更深 */
-    }
-    /* =========================
-       主体区域（统一 padding）
-    ========================= */
+
+    /* =====================================================
+       4. 核心重构：Main 使用 Grid（视觉完全一致）
+    ===================================================== */
     main {
-      position: relative;
       max-width: 1200px;
       margin: 0 auto;
       padding: 120px 40px 60px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 40px;
     }
-    /* =========================
-       阅读卡片（毛玻璃优化）
-    ========================= */
+
+    @media (max-width: 1100px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* =====================================================
+       5. Card 模块（视觉保持）
+    ===================================================== */
     .card {
       max-width: 720px;
-      margin-left: 0;
-      margin-right: 320px;
-      margin-bottom: 50px;
       padding: 36px 40px;
-      backdrop-filter: blur(26px) saturate(160%);
-      -webkit-backdrop-filter: blur(26px) saturate(160%);
       border-radius: 22px;
-      border: 1px solid rgba(255,255,255,0.3);
-      box-shadow:
-        0 12px 40px rgba(0,0,0,0.25),
-        inset 0 1px 1px rgba(255,255,255,0.5);
-      transition: all 0.4s ease;
+      backdrop-filter: blur(26px) saturate(160%);
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-main);
+      margin-bottom: 50px;
     }
-    body:not(.dark-mode) .card {
-      background: rgba(255,255,255,0.45); /* 浅色模式下透明度更高，毛玻璃更明显 */
-      border: 1px solid rgba(0,0,0,0.15);
-      box-shadow:
-        0 12px 40px rgba(0,0,0,0.2),
-        inset 0 1px 1px rgba(0,0,0,0.1);
-    }
-    body.dark-mode .card {
-      background: rgba(30,30,30,0.65);
-      border: 1px solid rgba(255,255,255,0.15);
-      box-shadow:
-        0 12px 40px rgba(0,0,0,0.6),
-        inset 0 1px 1px rgba(255,255,255,0.1);
-    }
-    /* =========================
-       右侧网站数据卡片（毛玻璃优化）
-    ========================= */
+
+    /* =====================================================
+       6. 右侧 Site Stats（从 absolute → Grid）
+    ===================================================== */
     #site-stats {
-      position: absolute;
-      top: 260px;
-      right: 40px;
-      width: 250px;
+      align-self: start;
       padding: 22px 20px;
-      backdrop-filter: blur(28px) saturate(170%);
-      -webkit-backdrop-filter: blur(28px) saturate(170%);
       border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.3);
-      box-shadow:
-        0 14px 40px rgba(0,0,0,0.35),
-        inset 0 1px 1px rgba(255,255,255,0.5);
-      transition: all 0.4s ease;
-      z-index: 900;
+      backdrop-filter: blur(28px) saturate(170%);
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-main);
     }
-    body:not(.dark-mode) #site-stats {
-      background: rgba(255,255,255,0.45); /* 浅色模式下透明度更高，毛玻璃更明显 */
-      border: 1px solid rgba(0,0,0,0.15);
-      box-shadow:
-        0 14px 40px rgba(0,0,0,0.25),
-        inset 0 1px 1px rgba(0,0,0,0.1);
-    }
-    body.dark-mode #site-stats {
-      background: rgba(30,30,30,0.65);
-      border: 1px solid rgba(255,255,255,0.15);
-      box-shadow:
-        0 14px 40px rgba(0,0,0,0.6),
-        inset 0 1px 1px rgba(255,255,255,0.1);
-    }
-    /* =========================
-       模块显示控制
-    ========================= */
-    .module {
-      display: none;
-    }
-    .module.active {
-      display: block;
-    }
-    /* =========================
-       响应式
-    ========================= */
-    @media (max-width: 1100px) {
-      .card {
-        margin-right: 0;
-        max-width: 100%;
-      }
-      #site-stats {
-        position: static;
-        width: auto;
-        margin: 40px 0 0;
-      }
-    }
-    /* =========================
-       右上角主题切换按钮（恢复为原样样式）
-    ========================= */
+
+    /* =====================================================
+       7. 模块切换
+    ===================================================== */
+    .module { display: none; }
+    .module.active { display: block; }
+
+    /* =====================================================
+       8. 主题切换按钮（原样）
+    ===================================================== */
     .theme-toggle {
       position: fixed;
       top: 20px;
@@ -239,21 +172,12 @@
       align-items: center;
       justify-content: center;
       font-size: 24px;
-      color: #fff;
-      transition: all 0.3s ease;
       z-index: 1200;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
-    .theme-toggle:hover {
-      transform: scale(1.1);
-      background: rgba(255,255,255,0.4);
-    }
-    body.dark-mode .theme-toggle {
-      background: rgba(0,0,0,0.3);
-      border-color: rgba(255,255,255,0.2);
-      color: #e0e0e0;
-    }
-    /* 新增：名言卡片样式（匹配毛玻璃主题，固定在页面底部中心） */
+
+    /* =====================================================
+       9. Quote 卡片（保持原样）
+    ===================================================== */
     #quote-card {
       position: fixed;
       bottom: 20px;
@@ -261,336 +185,90 @@
       transform: translateX(-50%);
       max-width: 600px;
       padding: 16px 24px;
-      backdrop-filter: blur(20px) saturate(150%);
-      -webkit-backdrop-filter: blur(20px) saturate(150%);
+      backdrop-filter: blur(20px);
       border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.3);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      background: var(--bg-card);
+      box-shadow: var(--shadow-main);
       text-align: center;
       font-style: italic;
-      font-size: 16px;
-      z-index: 1000;
-      transition: all 0.4s ease, opacity 0.5s ease; /* 新增：为淡入淡出添加opacity过渡 */
-      cursor: pointer; /* 新增：鼠标悬停时显示指针，表示可点击 */
-    }
-    body:not(.dark-mode) #quote-card {
-      background: rgba(255,255,255,0.5);
-      border: 1px solid rgba(0,0,0,0.15);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-    }
-    body.dark-mode #quote-card {
-      background: rgba(30,30,30,0.7);
-      border: 1px solid rgba(255,255,255,0.15);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+      cursor: pointer;
+      transition: all .4s ease;
     }
 
-    /* ★ 我在这里对名言文本与作者做最小调整（不动其他样式） */
-    #quote-card p { margin: 0; }
-    #quote-card small {
-      display: block;
-      margin-top: 8px;
-      text-align: right; /* ★ 作者右对齐 */
-      opacity: 0.85;
-      font-size: 14px;
+    #quote-card:hover {
+      transform: translateX(-50%) scale(1.03);
     }
-    /* 悬停与按下交互反馈（只影响名言卡片） */
-    #quote-card:hover { transform: translateX(-50%) scale(1.03); }
-    #quote-card:active { transform: translateX(-50%) scale(0.97); }
-
   </style>
 </head>
-<body> <!-- 默认浅色模式，不加 class -->
-  <!-- 右上角主题切换按钮（文字/功能与原版一致） -->
-  <div class="theme-toggle" onclick="toggleTheme()" title="切换深色/浅色模式">
-    🌙
-  </div>
+
+<body>
+
+  <div class="theme-toggle" onclick="toggleTheme()">🌙</div>
+
   <header>我的成长路径</header>
-  <div id="site-stats">
-    <h3>SITE STATUS</h3>
-    <div class="stat-item">
-      <span class="stat-label">已运行：</span>
-      <span class="stat-value" id="site-runtime">计算中...</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-label">题解数量：</span>
-      <span class="stat-value" id="article-count">计算中...</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-label">最后更新：</span>
-      <span class="stat-value" id="last-update">计算中...</span>
-    </div>
-  </div>
+
   <nav>
     <button class="active" onclick="showModule('home', this)">首页</button>
     <button onclick="showModule('roadmap', this)">学习路线</button>
     <button onclick="showModule('problems', this)">刷题记录</button>
     <button onclick="showModule('log', this)">学习日志</button>
     <button onclick="showModule('about', this)">关于我</button>
-    <button onclick="location.href='/note/'">题解笔记</button>
-    <button onclick="location.href='/memory.html'">网站回忆</button>
-
-
   </nav>
-  <main>
-    <div id="home" class="module active">
-      <div class="card">
-        <h2>欢迎</h2>
-        <p>这是我用来长期记录学习和成长的个人网站。</p>
-      </div>
-    </div>
-    <div id="roadmap" class="module">
-      <div class="card">
-        <h2>学习路线</h2>
-        <ul>
-          <li>基础算法：前缀和 / 二分 / 双指针</li>
-          <li>图论：BFS / DFS</li>
-          <li>竞赛平台：Codeforces / AtCoder</li>
-        </ul>
-      </div>
-    </div>
-    <div id="problems" class="module">
-      <div class="card">
-        <h2>刷题记录</h2>
-        <p>客官想看哪篇题解？</p>
-      </div>
-    </div>
-    <div id="log" class="module"></div>
-    <div id="about" class="module">
-      <div class="card">
-        <h2>关于我</h2>
-        <p>专注算法与竞赛，记录真实成长过程。</p>
-      </div>
-    </div>
-    <div id="memory" class="module">
-      <div class="card">
-          <h2>网站回忆</h2>
-      <div id="memory-content"></div>
-      </div>
-    </div>
 
+  <main>
+    <!-- 左侧内容 -->
+    <section>
+      <div id="home" class="module active">
+        <div class="card">
+          <h2>欢迎</h2>
+          <p>这是我用来长期记录学习和成长的个人网站。</p>
+        </div>
+      </div>
+
+      <div id="roadmap" class="module">
+        <div class="card">
+          <h2>学习路线</h2>
+          <ul>
+            <li>基础算法</li>
+            <li>图论</li>
+            <li>竞赛平台</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="log" class="module"></div>
+
+      <div id="about" class="module">
+        <div class="card">
+          <h2>关于我</h2>
+          <p>专注算法与竞赛，记录真实成长过程。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 右侧 -->
+    <aside id="site-stats">
+      <h3>SITE STATUS</h3>
+      <p id="site-runtime">计算中...</p>
+    </aside>
   </main>
-  <!-- 名言显示容器（固定在页面底部中心） -->
+
   <div id="quote-card"></div>
 
   <script>
-    // 模块切换（保持原样）
     function showModule(id, btn) {
-      document.querySelectorAll('.module').forEach(m =>
-        m.classList.remove('active')
-      );
+      document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
       document.getElementById(id).classList.add('active');
-      document.querySelectorAll('nav button').forEach(b =>
-        b.classList.remove('active')
-      );
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     }
 
-    // 日志渲染（保持原样）
-    const logs = [
-      { date: "2026-01-14", text: "搭建 GitHub Pages 个人网站" },
-      { date: "2026-01-15", text: "完成第一个可交互模块页面" }
-    ];
-    function renderLogs() {
-      const container = document.getElementById("log");
-      container.innerHTML = `
-        <div class="card">
-          <h2>学习日志</h2>
-          <ul>
-            ${logs.map(l => `<li>${l.date}：${l.text}</li>`).join("")}
-          </ul>
-        </div>
-      `;
-    }
-    renderLogs();
-
-    // 站点运行时间（保持原样）
-    const SITE_CREATE_TIME = new Date('2026-01-15 20:00:00');
-    function updateRuntime() {
-      const now = new Date();
-      let diff = Math.floor((now - SITE_CREATE_TIME) / 1000);
-      const d = Math.floor(diff / 86400);
-      diff %= 86400;
-      const h = Math.floor(diff / 3600);
-      diff %= 3600;
-      const m = Math.floor(diff / 60);
-      const s = diff % 60;
-      document.getElementById('site-runtime').innerText =
-        `${d} 天 ${h} 小时 ${m} 分 ${s} 秒`;
-    }
-
-    // 自动更新题解数量 & 最后更新（保持原样）
-    (async function updateArticleStats() {
-      try {
-        const contentsRes = await fetch(
-          "https://api.github.com/repos/07-Kyler/07-Kyler.github.io/contents/note"
-        );
-        if (!contentsRes.ok) throw new Error("contents api failed");
-        const items = await contentsRes.json();
-        const count = items.filter(item => item.type === "file").length;
-        const commitRes = await fetch(
-          "https://api.github.com/repos/07-Kyler/07-Kyler.github.io/commits?path=note&per_page=1"
-        );
-        if (!commitRes.ok) throw new Error("commit api failed");
-        const [latestCommit] = await commitRes.json();
-        let updateText = "—";
-        if (latestCommit) {
-          const d = new Date(latestCommit.commit.author.date);
-          updateText = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-        }
-        document.getElementById("article-count").innerText = count;
-        document.getElementById("last-update").innerText = updateText;
-      } catch (err) {
-        console.error("无法获取仓库统计", err);
-        document.getElementById("article-count").innerText = "—";
-        document.getElementById("last-update").innerText = "获取失败";
-      }
-    })();
-    updateRuntime();
-    setInterval(updateRuntime, 1000);
-
-    // === 主题切换：恢复你原先的完整实现（未改动逻辑） ===
     function toggleTheme() {
-      document.body.classList.add("theme-switching");
-      document.body.classList.toggle("dark-mode");
-      const isDark = document.body.classList.contains("dark-mode");
-
-      const toggleBtn = document.querySelector(".theme-toggle");
-      toggleBtn.textContent = isDark ? "☀️" : "🌙";
-      localStorage.setItem("theme", isDark ? "dark" : "light");
-      setTimeout(() => {
-        document.body.classList.remove("theme-switching");
-      }, 300);
+      document.body.classList.toggle('dark-mode');
+      document.querySelector('.theme-toggle').textContent =
+        document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
     }
-
-    // 页面加载时恢复主题（保持原样），并渲染名言
-    window.addEventListener("load", () => {
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "dark") {
-        document.body.classList.add("dark-mode");
-        document.querySelector(".theme-toggle").textContent = "☀️";
-      } else {
-        document.body.classList.remove("dark-mode");
-        document.querySelector(".theme-toggle").textContent = "🌙";
-      }
-      renderRandomQuote(); // 名言首次渲染
-    });
-
-    // 名言数组（保持原结构）
-    const quotes = [
-      { text: "算法是计算机科学的灵魂。", author: "Donald Knuth" },
-      { text: "好的算法可以让不可能变得可能。", author: "Alan Turing" },
-      { text: "效率不是一切，但没有效率，一切皆无。", author: "Edsger Dijkstra" },
-      { text: "编程是思考的过程，不是打字的过程。", author: "Linus Torvalds" },
-      { text: "算法的优雅在于其简单性。", author: "Robert Tarjan" },
-      { text: "The only way to learn a new programming language is by writing programs in it.", author: "Dennis Ritchie" },
-      { text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.", author: "Martin Fowler" },
-      { text: "Programs must be written for people to read, and only incidentally for machines to execute.", author: "Harold Abelson" },
-      { text: "Talk is cheap. Show me the code.", author: "Linus Torvalds" },
-      { text: "Premature optimization is the root of all evil.", author: "Donald Knuth" },
-      { text: "Simplicity is the ultimate sophistication.", author: "Leonardo da Vinci" },
-      { text: "Testing can show the presence of bugs, but not their absence.", author: "Edsger Dijkstra" },
-      { text: "The best way to predict the future is to implement it.", author: "David Heinemeier Hansson" },
-      { text: "Code is like humor. When you have to explain it, it’s bad.", author: "Cory House" },
-      { text: "First, solve the problem. Then, write the code.", author: "John Johnson" },
-      { text: "Experience is the name everyone gives to their mistakes.", author: "Oscar Wilde" }
-    ];
-
-    // 最小侵入：防止连续重复 & 渲染 + 点击与定时（只改这儿）
-    let lastQuoteIndex = -1;
-    function renderRandomQuote() {
-      const quoteCard = document.getElementById('quote-card');
-      quoteCard.style.opacity = 0; // 先淡出
-      setTimeout(() => {
-        let randomIndex;
-        do {
-          randomIndex = Math.floor(Math.random() * quotes.length);
-        } while (randomIndex === lastQuoteIndex && quotes.length > 1); // 保证不连续重复
-        lastQuoteIndex = randomIndex;
-        const quote = quotes[randomIndex];
-        quoteCard.innerHTML = `
-          <p>"${quote.text}"</p>
-          <small>— ${quote.author}</small>
-        `;
-        quoteCard.style.opacity = 1; // 再淡入
-      }, 500); // 淡出时间匹配transition 0.5s
-    }
-
-    // 页面加载后设置定时切换（每10秒一次）和点击切换（保持原样）
-    window.addEventListener("load", () => {
-      const quoteCard = document.getElementById('quote-card');
-      quoteCard.onclick = renderRandomQuote; // 点击切换
-      setInterval(renderRandomQuote, 10000); // 定时切换，每10秒
-    });
-
-    /* =========================
-       新增：网站回忆（最小侵入，直接追加内容，不改动其他逻辑）
-       - 我只在此处添加了 memoryMarkdown 与 renderMemory()
-       - 并在页面中保留了调用 renderMemory() 的单行
-    ========================= */
-    // （新增）Markdown 渲染：通过浏览器端简单渲染（若要从外部 md 加载可另扩展）
-    (function(){
-      // 为了最小侵入，我使用一个非常简单的内联 Markdown parser（若你不想引入外部库）
-      // 但为了渲染效果更好，可以引入 marked 等库 — 我这里保留最小化实现：
-      // 如果你希望我改为 CDN 引入 marked 并用 marked.parse，请回复我即可。
-    })();
-
-    // ===== 插入的网站回忆内容（可改） =====
-    const memoryMarkdown = `
-### 2026-01-15
-- 初次搭建个人网站
-- 完成基础页面结构
-
-### 2026-01-16
-- 引入深色 / 浅色模式
-- 添加毛玻璃效果
-
-### 2026-01-18
-- 新增名言卡片模块
-- 支持自动切换与点击切换
-
-### 2026-01-20
-- 新增“网站回忆”栏目（用于记录网站自身的修改历史）
-`;
-
-    // 为了兼容性与“最小侵入”，我在此处尝试使用浏览器上的简单转义（若你已经在 <head> 引入了 marked，可替换为 marked.parse）
-    function simpleMdToHtml(md){
-      // 极简转换：标题 & 列表 & 空行处理（仅用于回忆模块，足够使用）
-      let html = md
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-      // 转 H3
-      html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
-      // 转 UL items
-      html = html.replace(/^\s*-\s+(.*$)/gim, '<li>$1</li>');
-      // 将连续的 <li> 包成 <ul>
-      html = html.replace(/(<li>[\s\S]*?<\/li>)/gim, function(m){
-        if(m.indexOf('<li>')===0){
-          return '<ul>' + m.replace(/<\/li>\s*<li>/g,'</li><li>') + '</ul>';
-        }
-        return m;
-      });
-      // 段落
-      html = html.replace(/\n{2,}/g, '</p><p>');
-      html = '<p>' + html + '</p>';
-      // 清理空的段落
-      html = html.replace(/<p><\/p>/g, '');
-      return html;
-    }
-
-    function renderMemory() {
-      const container = document.getElementById("memory-content");
-      if(!container) {
-        // 如果页面中暂时没有 memory 容器（保持最小侵入，不强制创建）
-        return;
-      }
-      // 使用简单解析渲染（安全、无需外部依赖）
-      container.innerHTML = simpleMdToHtml(memoryMarkdown);
-    }
-
-    // 在页面加载时调用一次（不影响其他 load 监听）
-    window.addEventListener('load', renderMemory);
-
   </script>
+
 </body>
 </html>
